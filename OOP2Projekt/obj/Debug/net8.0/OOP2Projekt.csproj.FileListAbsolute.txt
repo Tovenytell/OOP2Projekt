@@ -1,0 +1,15 @@
+/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/bin/Debug/net8.0/OOP2Projekt
+/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/bin/Debug/net8.0/OOP2Projekt.deps.json
+/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/bin/Debug/net8.0/OOP2Projekt.runtimeconfig.json
+/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/bin/Debug/net8.0/OOP2Projekt.dll
+/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/bin/Debug/net8.0/OOP2Projekt.pdb
+/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/obj/Debug/net8.0/OOP2Projekt.GeneratedMSBuildEditorConfig.editorconfig
+/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/obj/Debug/net8.0/OOP2Projekt.AssemblyInfoInputs.cache
+/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/obj/Debug/net8.0/OOP2Projekt.AssemblyInfo.cs
+/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/obj/Debug/net8.0/OOP2Projekt.csproj.CoreCompileInputs.cache
+/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/obj/Debug/net8.0/OOP2Projekt.sourcelink.json
+/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/obj/Debug/net8.0/OOP2Projekt.dll
+/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/obj/Debug/net8.0/refint/OOP2Projekt.dll
+/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/obj/Debug/net8.0/OOP2Projekt.pdb
+/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/obj/Debug/net8.0/OOP2Projekt.genruntimeconfig.cache
+/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/obj/Debug/net8.0/ref/OOP2Projekt.dll
