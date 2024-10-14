@@ -7,6 +7,8 @@ Console.WriteLine("Hej Sofia!");
 
 Console.WriteLine(  "Toveeeeeeee heiiiiii");
 
+//Test igen hehe
+
 
 class Fish
 {
