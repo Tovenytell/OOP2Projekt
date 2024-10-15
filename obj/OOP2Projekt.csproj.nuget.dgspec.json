@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/OOP2Projekt.csproj": {}
+    "/Users/tovenytell/Documents/Visual studios/OOP2Projekt/OOP2Projekt/OOP2Projekt/OOP2Projekt.csproj": {}
   },
   "projects": {
-    "/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/OOP2Projekt.csproj": {
+    "/Users/tovenytell/Documents/Visual studios/OOP2Projekt/OOP2Projekt/OOP2Projekt/OOP2Projekt.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/OOP2Projekt.csproj",
+        "projectUniqueName": "/Users/tovenytell/Documents/Visual studios/OOP2Projekt/OOP2Projekt/OOP2Projekt/OOP2Projekt.csproj",
         "projectName": "OOP2Projekt",
-        "projectPath": "/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/OOP2Projekt.csproj",
+        "projectPath": "/Users/tovenytell/Documents/Visual studios/OOP2Projekt/OOP2Projekt/OOP2Projekt/OOP2Projekt.csproj",
         "packagesPath": "/Users/tovenytell/.nuget/packages/",
-        "outputPath": "/Users/tovenytell/Documents/Visual studios/OOP2Project/OOP2Projekt/obj/",
+        "outputPath": "/Users/tovenytell/Documents/Visual studios/OOP2Projekt/OOP2Projekt/OOP2Projekt/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/tovenytell/.nuget/NuGet/NuGet.Config"
