@@ -2,6 +2,11 @@
 using System.Threading.Channels;
 
 Console.WriteLine("Hejsan");
+new Game().Run();
+//Deck deck = new Deck();
 
-Deck deck = new Deck();
-deck.PrintDeck();
+//deck.PrintDeck();
+//deck.Shuffle();
+
+
+
