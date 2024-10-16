@@ -1,3 +1,3 @@
-public class RandomBehavior : AskBehavior{
+// public class RandomBehavior : AskBehavior{
     
-}
+// }

@@ -1,3 +1,3 @@
-public class SimplePointSystem : IPointSystem{
+// public class SimplePointSystem : IPointSystem{
     
-}
+// }

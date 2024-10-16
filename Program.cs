@@ -2,3 +2,6 @@
 using System.Threading.Channels;
 
 Console.WriteLine("Hejsan");
+
+Deck deck = new Deck();
+deck.PrintDeck();

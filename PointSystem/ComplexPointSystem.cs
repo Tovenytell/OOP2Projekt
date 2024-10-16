@@ -1,3 +1,3 @@
-public class ComplexPointSystem : IPointSystem{
+// public class ComplexPointSystem : IPointSystem{
     
-}
+// }
