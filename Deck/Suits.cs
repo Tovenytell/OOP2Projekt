@@ -1,4 +1,4 @@
-enum Suits
+ public enum Suits
     {
         Spades,
         Clubs,

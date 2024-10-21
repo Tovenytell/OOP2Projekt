@@ -1,4 +1,4 @@
- enum Values
+ public enum Values
     {
         Ace = 1,
         Two = 2,

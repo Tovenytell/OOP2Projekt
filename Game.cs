@@ -6,6 +6,16 @@ public class Game
     private HumanPlayer humanPlayer;
     private ComputerPlayer computerPlayer;
 
+    // public Game(string playerName)
+    // {
+
+    //     Deck stock = new Deck();
+    //     // HumanPlayer humanPlayer = new HumanPlayer(playerName);
+    //     // ComputerPlayer computerPlayer = new ComputerPlayer();
+
+    // }
+    
+
     //public Game()
     public void Run()
     {
@@ -13,6 +23,7 @@ public class Game
         //som har vilka kvartetter 
         
         //quartettes = new Dictionary<Values, Player>();
+        
         stock = new Deck();
         InitialDeal();
         
@@ -25,22 +36,40 @@ public class Game
 
         Console.WriteLine(humanPlayer.Name + computerPlayer.Name);
 
+        //Human player ska välja vilken typ av behavior computer player ska ha
+        //Human player ska välja vilken typ av point system
 
-        // //sortera spelarens hand 
-        // player.SortHand();
+        //Starta loop gällande spelarnas turer
+            //Kolla innan varje tur startar om det finns kort i båda spelarnas händer
+            //om inte, ska spelaren utan kort kunna ta upp
+            //om korten är slut i bådas händer och i sjön är spelet slut
+
+            //ena spelarens tur börjar
+                //frågar efter ett kort
+                //får kort -> korten läggs in på rätt plats -> kollar om man har 4tal
+                    //-> om 4tal -> lägg ner kort annars fråga igen
+                //inte får kort -> tar kort från sjön -> kollar om man har 4tal
+                    //-> om 4tal -> lägg ner kort annars nästas tur
+
+
+
     }
 
     // Dela ut 4 kort var till varje spelare
     // !!ATT LÖSA!! : syntax? Kan vi använda add på typen Deck? 
     public void InitialDeal()
     {
+        
         stock.Shuffle();
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 4; i++)
         {
             humanPlayer.TakeCard(stock.Deal());
             computerPlayer.TakeCard(stock.Deal());
 
         }
+
+        humanPlayer.SortHand(); //funkar detta??
+        computerPlayer.SortHand();
 
         // {
         //     stock[i] = humanPlayer.hand.Add();

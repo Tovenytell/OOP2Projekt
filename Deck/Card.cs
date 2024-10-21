@@ -1,4 +1,4 @@
-class Card
+public class Card
     {
         public Suits Suit { get; set; }
         public Values Value { get; set; }
