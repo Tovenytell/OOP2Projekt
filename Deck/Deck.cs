@@ -1,4 +1,4 @@
-  public class Deck
+  class Deck
     {
         private List<Card> cards; //IEnumerable ist för list?
         private Random random = new Random();
@@ -12,7 +12,27 @@
                     cards.Add(new Card((Suits)suit, (Values)value));
         }
 
-        
+        public Deck(IEnumerable<Card> initialCards)
+        {
+            cards = new List<Card>(initialCards);
+        }
+
+        public Card Deal(int index)
+        {
+            Card CardToDeal = cards[index];
+            cards.RemoveAt(index);
+            return CardToDeal;
+        }
+
+        public Card Deal()
+        {
+            return Deal(0);
+        }
+
+        public void Add(Card cardToAdd)
+        {
+            cards.Add(cardToAdd);
+        }
 
          public void PrintDeck()
         {

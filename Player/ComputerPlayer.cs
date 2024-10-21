@@ -1,6 +1,6 @@
 using System.Threading.Channels;
 
-public class ComputerPlayer{
+public class ComputerPlayer : Player{
     //AskBehavior askBehavior;
 
     private string name = "Computer-player";
