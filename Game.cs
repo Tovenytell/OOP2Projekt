@@ -1,7 +1,7 @@
 public class Game
 {
     //private Dictionary<Values, Player> quartettes; 
-    //public Deck stock; 
+    public Deck stock; 
 
 
 
@@ -11,9 +11,9 @@ public class Game
         //skapar dictionary för att kunna spara resultatet, vilken spelare 
         //som har vilka kvartetter 
         
-        // //quartettes = new Dictionary<Values, Player>();
-        // stock = new Deck();
-        // Deal();
+        //quartettes = new Dictionary<Values, Player>();
+        stock = new Deck();
+        Deal();
         
         // //skapa ny player 
         Console.WriteLine("Welcome to our pond, let's go fishing ;D What's your name bestie?");
@@ -28,17 +28,23 @@ public class Game
         // player.SortHand();
     }
 
-    //Dela ut 4 kort var till varje spelare
+    // Dela ut 4 kort var till varje spelare
     // !!ATT LÖSA!! : syntax? Kan vi använda add på typen Deck? 
-//     private void InitialDeal()
-//     {
-//         stock.Shuffle();
-//         for (int i = 0; i < 8; i++)
-//         {
-//             stock[i] = humanPlayer.hand.Add();
-//             i++;
+    private void InitialDeal()
+    {
+        stock.Shuffle();
+        for (int i = 0; i < 4; i++)
+        {
+                foreach(Card card in stock){
+                    
+                }
+        }
 
-//             stock[i] = computerPlayer.hand.Add();
-//         }
-//     }
+        // {
+        //     stock[i] = humanPlayer.hand.Add();
+        //     i++;
+
+        //     stock[i] = computerPlayer.hand.Add();
+        // }
+    }
 }
