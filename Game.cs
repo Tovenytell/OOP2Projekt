@@ -6,35 +6,56 @@ public class Game
     private HumanPlayer humanPlayer;
     private ComputerPlayer computerPlayer;
 
-    // public Game(string playerName)
+    private Behavior computerBehavior;
+
+    // public Game(string hPlayerName, string cPlayerName)
     // {
 
     //     Deck stock = new Deck();
-    //     // HumanPlayer humanPlayer = new HumanPlayer(playerName);
-    //     // ComputerPlayer computerPlayer = new ComputerPlayer();
+    //     HumanPlayer humanPlayer = new HumanPlayer(hPlayerName);
+    //     ComputerPlayer computerPlayer = new ComputerPlayer(cPlayerName);
 
     // }
     
-
-    //public Game()
     public void Run()
     {
         //skapar dictionary för att kunna spara resultatet, vilken spelare 
         //som har vilka kvartetter 
         
-        //quartettes = new Dictionary<Values, Player>();
-        
         stock = new Deck();
-        InitialDeal();
         
         // //skapa ny player 
         Console.WriteLine("Welcome to our pond, let's go fishing ;D What's your name bestie?");
-        string playerName = Console.ReadLine();
+        string humanPlayerName = Console.ReadLine();
+        Console.WriteLine("Vad ska din motståndare heta?");
+        string computerPlayerName = Console.ReadLine();
 
-        HumanPlayer humanPlayer = new HumanPlayer(playerName);
-        ComputerPlayer computerPlayer = new ComputerPlayer();
+        humanPlayer = new HumanPlayer(humanPlayerName);
+        computerPlayer = new ComputerPlayer(computerPlayerName);
 
         Console.WriteLine(humanPlayer.Name + computerPlayer.Name);
+        InitialDeal();
+
+        //vill du köra random? ja:
+        Behavior computerBehavior = new RandomBehavior();
+        computerBehavior.CheckAvailableValues(computerPlayer);
+
+        Console.WriteLine("Human player hand: ");
+        foreach(Card card in humanPlayer.hand)
+        {
+            Console.WriteLine(card);
+        }
+
+        Console.WriteLine("Comp player hand: ");
+        foreach(Card card in computerPlayer.hand)
+        {
+            Console.WriteLine(card);
+        }
+
+        Console.WriteLine("Lake: ");
+        foreach(Card card in stock){
+            Console.WriteLine(card);
+        }
 
         //Human player ska välja vilken typ av behavior computer player ska ha
         //Human player ska välja vilken typ av point system
@@ -49,17 +70,17 @@ public class Game
                 //får kort -> korten läggs in på rätt plats -> kollar om man har 4tal
                     //-> om 4tal -> lägg ner kort annars fråga igen
                 //inte får kort -> tar kort från sjön -> kollar om man har 4tal
-                    //-> om 4tal -> lägg ner kort annars nästas tur
+                    //-> om 4tal -> lägg ner kort annars nästas
 
 
 
     }
 
     // Dela ut 4 kort var till varje spelare
-    // !!ATT LÖSA!! : syntax? Kan vi använda add på typen Deck? 
     public void InitialDeal()
     {
         
+        //Deck cards = stock.Shuffle();
         stock.Shuffle();
         for (int i = 0; i < 4; i++)
         {
@@ -68,14 +89,7 @@ public class Game
 
         }
 
-        humanPlayer.SortHand(); //funkar detta??
-        computerPlayer.SortHand();
-
-        // {
-        //     stock[i] = humanPlayer.hand.Add();
-        //     i++;
-
-        //     stock[i] = computerPlayer.hand.Add();
-        // }
+        // humanPlayer.SortHand(); //funkar detta??
+        // computerPlayer.SortHand();
     }
 }

@@ -20,5 +20,10 @@ public class Card
             }
         }
 
+        public override string ToString()
+        {
+            return $"{Value} of {Suit}";
+        }
+
         
     }

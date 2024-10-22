@@ -1,3 +1,3 @@
-// public class SmartBehavior : AskBehavior{
+public class SmartBehavior : Behavior{
     
-// }
+}

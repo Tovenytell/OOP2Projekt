@@ -1,5 +1,3 @@
-// using System.Threading.Channels;
-
-// interface IPointSystem{
+interface IPointSystem{
     
-// }
+}
