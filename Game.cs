@@ -6,6 +6,8 @@ public class Game
     private HumanPlayer humanPlayer;
     private ComputerPlayer computerPlayer;
 
+    public int playCounter = 0;
+
     private Behavior computerBehavior;
 
     // public Game(string hPlayerName, string cPlayerName)
@@ -19,12 +21,9 @@ public class Game
     
     public void Run()
     {
-        //skapar dictionary för att kunna spara resultatet, vilken spelare 
-        //som har vilka kvartetter 
-        
         stock = new Deck();
         
-        // //skapa ny player 
+        //skapa ny player 
         Console.WriteLine("Welcome to our pond, let's go fishing ;D What's your name bestie?");
         string humanPlayerName = Console.ReadLine();
         Console.WriteLine("Vad ska din motståndare heta?");
@@ -36,25 +35,35 @@ public class Game
         Console.WriteLine(humanPlayer.Name + computerPlayer.Name);
         InitialDeal();
 
-        //vill du köra random? ja:
-        Behavior computerBehavior = new RandomBehavior();
-        computerBehavior.CheckAvailableValues(computerPlayer);
-
-        Console.WriteLine("Human player hand: ");
-        foreach(Card card in humanPlayer.hand)
+        //vill du köra random? if yes:
+        Console.WriteLine("Vill du köra random behavior?");
+        if (Console.ReadLine() == "ja")
         {
-            Console.WriteLine(card);
+            computerBehavior = new RandomBehavior();
         }
-
-        Console.WriteLine("Comp player hand: ");
-        foreach(Card card in computerPlayer.hand)
+        else
         {
-            Console.WriteLine(card);
+            //else
+            computerBehavior = new SmartBehavior();
         }
+        
+        computerPlayer.SetBehavior(computerBehavior); //lagt till
+        
+        
+        while(stock.Count != 0 && humanPlayer.hand.Count != 0 && computerPlayer.hand.Count != 0)
+        {
+            if(playCounter % 2 == 0)
+            {
+                HumanPlayerTurn();
+            }
 
-        Console.WriteLine("Lake: ");
-        foreach(Card card in stock){
-            Console.WriteLine(card);
+            else 
+            {
+                ComputerPlayerTurn();
+            }
+
+            playCounter++;
+            
         }
 
         //Human player ska välja vilken typ av behavior computer player ska ha
@@ -72,6 +81,76 @@ public class Game
                 //inte får kort -> tar kort från sjön -> kollar om man har 4tal
                     //-> om 4tal -> lägg ner kort annars nästas
 
+
+
+    }
+
+    public void HumanPlayerTurn()
+    {
+        Console.WriteLine();
+        Console.WriteLine("Human player turn:");
+        Console.WriteLine();
+
+        Console.WriteLine("CompHand: ");
+        foreach(Card card in computerPlayer.hand)
+        {
+            Console.WriteLine(card);
+        }
+
+        Console.WriteLine();
+
+        Console.WriteLine("Vad vill du fråga efter?");
+        Values valueToAskFor = (Values)int.Parse(Console.ReadLine());
+        humanPlayer.ReceiveAskedCards(computerPlayer.PullOutValues(valueToAskFor));
+        // humanPlayer.HasQuartette(humanPlayer.hand);
+
+        //kolla efter 4tal och om man har det ska det läggas ner/lagras för point system sen
+
+        Console.WriteLine();
+        Console.WriteLine("Human hand: ");
+        foreach(Card card in humanPlayer.hand){
+            Console.WriteLine(card);
+        }
+    }
+
+    public void ComputerPlayerTurn()
+    {
+        Console.WriteLine();
+        Console.WriteLine("Computer player turn:");
+        List<Values> availableValues = computerBehavior.CheckAvailableValues(computerPlayer);
+        Values valueToAskFor;
+
+        // Check if the behavior is RandomBehavior and cast it
+        if (computerBehavior is RandomBehavior randomBehavior)
+        {
+            // Use AskRandomValue from RandomBehavior
+            valueToAskFor = randomBehavior.AskRandomValue(availableValues);
+        }
+        else if (computerBehavior is SmartBehavior smartBehavior)
+        {
+            valueToAskFor = smartBehavior.AskSmart(availableValues);
+        }
+        else
+        {
+            valueToAskFor = availableValues[0];
+            Console.WriteLine("Kom inte hit");
+        }
+
+
+        computerPlayer.ReceiveAskedCards(humanPlayer.PullOutValues(valueToAskFor));
+
+        Console.WriteLine();
+        Console.WriteLine("CompHand: ");
+        foreach(Card card in computerPlayer.hand)
+        {
+            Console.WriteLine(card);
+        }
+
+        Console.WriteLine("Human player hand:");
+        Console.WriteLine();
+        foreach(Card card in humanPlayer.hand){
+            Console.WriteLine(card);
+        }
 
 
     }

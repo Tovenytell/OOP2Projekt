@@ -100,41 +100,9 @@ public class Deck : IEnumerable<Card>
             return false;
        }
 
-       public List<Card> PullOutValues(Values value)
-       {
-            List<Card> deckToReturn = new List<Card>(new Card[] {});//ska vi ha array här?
-            for (int i = cards.Count - 1; i >= 0; i--) //vad bör skrivas? Hand/cards?
-            {
-                if (cards[i].Value == value)
-                {
-                    deckToReturn.Add(Deal(i));
-                } 
-            }
-            return deckToReturn;
-       } 
        
-    //    Kollar om en hand har 4:tal
-       public bool HasQuartette(Values value)
-       {
-            int numbOfCards = 0;
-            foreach (Card card in cards) //Hand/cards??
-            {
-                  if (card.Value == value)
-                  {
-                     numbOfCards++;
-                  }
-            }
-                    
-            if (numbOfCards == 4)
-            {
-                return true;
-            }
-                
-            else
-            {
-                return false;
-            }
-       }
+       
+    
     public void SortByValue()
     {
         cards.Sort(new CompareCardByValue());
