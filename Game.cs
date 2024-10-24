@@ -55,6 +55,7 @@ public class Game
             if(playCounter % 2 == 0)
             {
                 HumanPlayerTurn();
+
             }
 
             else 
@@ -102,6 +103,7 @@ public class Game
         Console.WriteLine("Vad vill du fråga efter?");
         Values valueToAskFor = (Values)int.Parse(Console.ReadLine());
         humanPlayer.ReceiveAskedCards(computerPlayer.PullOutValues(valueToAskFor));
+        humanPlayer.SortHand();
         // humanPlayer.HasQuartette(humanPlayer.hand);
 
         //kolla efter 4tal och om man har det ska det läggas ner/lagras för point system sen
@@ -138,6 +140,7 @@ public class Game
 
 
         computerPlayer.ReceiveAskedCards(humanPlayer.PullOutValues(valueToAskFor));
+        computerPlayer.SortHand();
 
         Console.WriteLine();
         Console.WriteLine("CompHand: ");

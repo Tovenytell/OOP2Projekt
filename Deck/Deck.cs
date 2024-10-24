@@ -87,34 +87,5 @@ public class Deck : IEnumerable<Card>
 
         public int Count { get {return cards.Count;}}
 
-       public bool ContainsValue(Values value)
-       {
-            foreach (Card card in cards)
-            {
-                if (card.Value == value)
-                {
-                    return true;
-                }
-            }
-            
-            return false;
-       }
-
-       
-       
-    
-    public void SortByValue()
-    {
-        cards.Sort(new CompareCardByValue());
-    }
-
-    internal object GroupBy(Func<object, object> value)
-    {
-        throw new NotImplementedException();
-    }
-
-    // public IEnumerator<Card> GetEnumerator()
-    // {
-    //     throw new NotImplementedException();
-    // }
+        
 }

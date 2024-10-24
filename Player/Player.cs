@@ -4,12 +4,15 @@ public abstract class Player{
 
     public string Name {get; set;}
     public List<Card> hand; 
+
+    public List<int> listOfQuartettes;
      
 
     public Player(string name)
     {
         this.Name = name;
         hand = new List<Card>();
+        listOfQuartettes = new List<int>();
     }
 
     //Metod som dealar ut ett kort till personen som måste "fiska"
@@ -46,19 +49,39 @@ public abstract class Player{
         } 
     }
        //    Kollar om en hand har 4:tal
-       public bool HasQuartette(Values value)
+       public bool HasQuartette()
        {
-            int numbOfCards = 0;
-            foreach (Card card in hand) //Hand/cards??
+            int numbOfCards = 1;
+            for (int i = 1; i <= hand.Count; i++)
             {
-                  if (card.Value == value)
-                  {
-                     numbOfCards++;
-                  }
+                if (hand[i].Value == hand[i-1].Value)
+                {
+                    numbOfCards++;
+                    if (numbOfCards == 4)
+                    {
+                        int intOfFoundQuartette = (int)hand[i].Value; 
+                        listOfQuartettes.Add(intOfFoundQuartette);
+                        for (int j = i; j == j-3; j--)
+                        {
+                            hand.RemoveAt(i);
+                        }
+                    }
+                }
             }
+
+            // foreach (Card card in hand) //Hand/cards??
+            // {
+            //       if (card.Value == value)
+            //       {
+            //          numbOfCards++;
+            //       }
+            // }
+
+            
                     
             if (numbOfCards == 4)
             {
+
                 return true;
             }
                 
@@ -68,7 +91,42 @@ public abstract class Player{
             }
        }
 
-    //public void SortHand() {hand.SortByValue();}
+    public void SortHand() 
+    {
+        hand.Sort(new CompareCardByValue());
+    }
 
+        
+
+       public bool ContainsValue(Values value)
+       {
+            foreach (Card card in hand)
+            {
+                if (card.Value == value)
+                {
+                    return true;
+                }
+            }
+            
+            return false;
+       }
+
+       
+       
+    
+    public void SortByValue()
+    {
+        hand.Sort(new CompareCardByValue());
+    }
+
+    internal object GroupBy(Func<object, object> value)
+    {
+        throw new NotImplementedException();
+    }
+
+    // public IEnumerator<Card> GetEnumerator()
+    // {
+    //     throw new NotImplementedException();
+    // }
     
 }
