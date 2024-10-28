@@ -13,4 +13,5 @@
         Jack = 11,
         Queen = 12,
         King = 13,
-    }
+    None = 14,
+}

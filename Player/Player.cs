@@ -48,47 +48,41 @@ public abstract class Player{
             hand.Add(card);
         } 
     }
-       //    Kollar om en hand har 4:tal
-       public bool HasQuartette()
+       //    Kollar om en hand har 4:tal, om den har det läggs det till i spelarens 4:tal lista
+       public void HasQuartette()
        {
             int numbOfCards = 1;
-            for (int i = 1; i <= hand.Count; i++)
+            for (int i = 1; i < hand.Count; i++)
             {
-                if (hand[i].Value == hand[i-1].Value)
+                if (hand[i].Value == hand[i - 1].Value)
                 {
                     numbOfCards++;
                     if (numbOfCards == 4)
                     {
                         int intOfFoundQuartette = (int)hand[i].Value; 
                         listOfQuartettes.Add(intOfFoundQuartette);
-                        for (int j = i; j == j-3; j--)
+                        for (int j = i; j > i - 4; j--)
                         {
-                            hand.RemoveAt(i);
+                            hand.RemoveAt(j);
                         }
                     }
                 }
+                else
+                {
+                    numbOfCards = 1;
+                }
             }
-
-            // foreach (Card card in hand) //Hand/cards??
+              
+            // if (numbOfCards == 4)
             // {
-            //       if (card.Value == value)
-            //       {
-            //          numbOfCards++;
-            //       }
+
+            //     return true;
             // }
-
-            
-                    
-            if (numbOfCards == 4)
-            {
-
-                return true;
-            }
                 
-            else
-            {
-                return false;
-            }
+            // else
+            // {
+            //     return false;
+            // }
        }
 
     public void SortHand() 
@@ -96,20 +90,30 @@ public abstract class Player{
         hand.Sort(new CompareCardByValue());
     }
 
-        
-
-       public bool ContainsValue(Values value)
-       {
-            foreach (Card card in hand)
-            {
-                if (card.Value == value)
-                {
-                    return true;
-                }
-            }
-            
+    public bool handIsEmpty()
+    {
+        if (!hand.Any())
+        {
+            return true;
+        }
+        else
+        {
             return false;
-       }
+        }
+    }
+
+    public bool ContainsValue(Values value)
+    {
+        foreach (Card card in hand)
+        {
+            if (card.Value == value)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
        
        
