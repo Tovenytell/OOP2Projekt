@@ -1,15 +1,51 @@
 public class SmartBehavior : Behavior
 {
+    int count; 
     public Values AskSmart(List<Values> availableValues)
-    {
+{
+    // // Dictionary to store the frequency of each rank in the computer's hand
+    // Dictionary<Values, int> rankFrequencies = new Dictionary<Values, int>();
 
-        //SKA ÄNDRAS!!!
-         Random random = new Random();
-        Values chosenValue = availableValues[random.Next(availableValues.Count)];
+    // // Count occurrences of each rank
+    // foreach (Values rank in availableValues)
+    // {
+    //     if (rankFrequencies.ContainsKey(rank))
+    //     {
+    //         rankFrequencies[rank]++;
+    //     }
+    //     else
+    //     {
+    //         rankFrequencies[rank] = 1;
+    //     }
+    // }
 
-        // Store the chosen value as the last asked value
-        lastAskedValue = chosenValue;
+    // // Find the most frequent rank(s)
+    // List<Values> mostFrequentRanks = new List<Values>();
+    // int maxCount = 0;
 
-        return chosenValue;
-    }
+    // foreach (Values rank in rankFrequencies)
+    // {
+    //     if (rank > maxCount)
+    //     {
+    //         mostFrequentRanks.Clear(); // Clear previous ranks
+    //         mostFrequentRanks.Add(rank.Key); // Add new most frequent rank
+    //         maxCount = rank.Value; // Update max count
+    //     }
+    //     else if (rank.Value == maxCount)
+    //     {
+    //         mostFrequentRanks.Add(rank.Key); // Add to list of ranks with max count
+    //     }
+    // }
+
+    // // Randomly select one of the most frequent ranks
+    // Random random = new Random();
+    // string selectedRank = mostFrequentRanks[random.Next(mostFrequentRanks.Count)];
+
+    // // "Ask" for the selected card rank
+    // Console.WriteLine($"Computer asks: Do you have any {selectedRank}s?");
+    
+    // // Here, you can implement logic to check if the human player has this card rank
+    // // and handle the response accordingly.
+}
+
 }

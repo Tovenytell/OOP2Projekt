@@ -12,6 +12,10 @@ public class Game
 
     private Behavior computerBehavior;
 
+    // private IPointSystem simplePointSystem;
+    // private IPointSystem complexPointSystem;
+    private IPointSystem pointSystem;
+
     // public Game(string hPlayerName, string cPlayerName)
     // {
 
@@ -50,37 +54,38 @@ public class Game
         
         computerPlayer.SetBehavior(computerBehavior); 
         
+        Console.WriteLine("\nVill du köra simple eller complex point system?");
+        if (Console.ReadLine() == "simple")
+        {
+            pointSystem = new SimplePointSystem();
+        }
+        else
+        {
+            pointSystem = new ComplexPointSystem();
+        }
+
         
         while(stock.Count != 0 || humanPlayer.hand.Count != 0 || computerPlayer.hand.Count != 0)
         {
+            Console.WriteLine($"\nKort kvar i leken: {stock.Count}");
+
             if(playCounter % 2 == 0)
             {
+                
                 HumanPlayerTurn();
             }
 
             else 
             {
+                //Console.WriteLine($"\nKort kvar i leken: {stock.Count}");
                 ComputerPlayerTurn();
             }
-
+            
             playCounter++;
             
         }
 
-        //Human player ska välja vilken typ av behavior computer player ska ha
-        //Human player ska välja vilken typ av point system
-
-        //Starta loop gällande spelarnas turer
-            //Kolla innan varje tur startar om det finns kort i båda spelarnas händer
-            //om inte, ska spelaren utan kort kunna ta upp
-            //om korten är slut i bådas händer och i sjön är spelet slut
-
-            //ena spelarens tur börjar
-                //frågar efter ett kort
-                //får kort -> korten läggs in på rätt plats -> kollar om man har 4tal
-                    //-> om 4tal -> lägg ner kort annars fråga igen
-                //inte får kort -> tar kort från sjön -> kollar om man har 4tal
-                    //-> om 4tal -> lägg ner kort annars nästas
+        AnnounceWinner(pointSystem);
 
     }
 
@@ -269,5 +274,21 @@ public class Game
 
         // humanPlayer.SortHand(); //funkar detta??
         // computerPlayer.SortHand();
+    }
+
+    public void AnnounceWinner(IPointSystem pointSystem)
+    {
+        int humanPlayerPoints = pointSystem.CalculatePoints(humanPlayer.listOfQuartettes);
+        int computerPlayerPoints = pointSystem.CalculatePoints(computerPlayer.listOfQuartettes);
+
+        if (humanPlayerPoints > computerPlayerPoints)
+        {
+            Console.WriteLine($"Grattis {humanPlayer.name} du har vunnit!");
+        }
+        else
+        {
+            Console.WriteLine("Datorn har vunnit!");
+        }
+
     }
 }

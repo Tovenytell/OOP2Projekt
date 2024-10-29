@@ -33,9 +33,17 @@ public class Deck : IEnumerable<Card>
         }
         public Card Deal(int index)
         {
-            Card CardToDeal = cards[index];
-            cards.RemoveAt(index);
-            return CardToDeal;
+            if (cards.Any())
+            {
+                Card CardToDeal = cards[index];
+                cards.RemoveAt(index);
+                return CardToDeal;
+            }
+            else
+            {
+                throw new InvalidOperationException("\nLeken är tom ");
+                
+            }
         }
 
         public Card Deal()
