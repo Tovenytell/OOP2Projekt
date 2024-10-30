@@ -35,25 +35,6 @@ public class Game
         Console.WriteLine("Vad ska din motståndare heta?");
         string computerPlayerName = Console.ReadLine();
 
-        humanPlayer = new HumanPlayer(humanPlayerName);
-        computerPlayer = new ComputerPlayer(computerPlayerName);
-
-        Console.WriteLine(humanPlayer.Name + computerPlayer.Name);
-        InitialDeal();
-
-        //vill du köra random? if yes:
-        Console.WriteLine("Vill du köra random behavior?");
-        if (Console.ReadLine() == "ja")
-        {
-            computerBehavior = new RandomBehavior();
-        }
-        else
-        {
-            computerBehavior = new SmartBehavior();
-        }
-        
-        computerPlayer.SetBehavior(computerBehavior); 
-        
         Console.WriteLine("\nVill du köra simple eller complex point system?");
         if (Console.ReadLine() == "simple")
         {
@@ -63,6 +44,26 @@ public class Game
         {
             pointSystem = new ComplexPointSystem();
         }
+
+        //vill du köra random? if yes:
+        Console.WriteLine("Vill du köra random behavior?");
+        if (Console.ReadLine() == "ja")
+        {
+            computerBehavior = new RandomBehavior(pointSystem);
+        }
+        else
+        {
+            computerBehavior = new SmartBehavior(pointSystem);
+        }
+
+        humanPlayer = new HumanPlayer(humanPlayerName);
+        computerPlayer = new ComputerPlayer(computerPlayerName, computerBehavior); //la till att skicka in compBehavior här ist så rad 56 inte behövs
+        Console.WriteLine(humanPlayer.Name + computerPlayer.Name);
+        InitialDeal();
+
+        //computerPlayer.SetBehavior(computerBehavior); 
+        
+        
 
         
         while(stock.Count != 0 || humanPlayer.hand.Count != 0 || computerPlayer.hand.Count != 0)
@@ -77,7 +78,6 @@ public class Game
 
             else 
             {
-                //Console.WriteLine($"\nKort kvar i leken: {stock.Count}");
                 ComputerPlayerTurn();
             }
             
@@ -161,16 +161,24 @@ public class Game
 
         //kolla efter 4tal och om man har det ska det läggas ner/lagras för point system sen
 
-        if (humanPlayer.handIsEmpty())
+        if (!(humanPlayer.handIsEmpty() && stock.Count == 0))
         {
-            humanPlayer.TakeCard(stock.Deal());
-        }
+                if (humanPlayer.handIsEmpty())
+            {
+                humanPlayer.TakeCard(stock.Deal());
+            }
 
-        if (!pulledOutValuesIsEmpty)
-        {
-            HumanPlayerTurn();
+            if (computerPlayer.handIsEmpty())
+            {
+                humanPlayer.TakeCard(stock.Deal());
+            }
+
+            if (!pulledOutValuesIsEmpty)
+            {
+                HumanPlayerTurn();
+            }
+
         }
-        
     }
 
     public void ComputerPlayerTurn()
@@ -210,21 +218,29 @@ public class Game
         List<Values> availableValues = computerBehavior.CheckAvailableValues(computerPlayer);
         Values valueToAskFor;
 
-        // Check if the behavior is RandomBehavior and cast it
-        if (computerBehavior is RandomBehavior randomBehavior)
-        {
-            // Use AskRandomValue from RandomBehavior
-            valueToAskFor = randomBehavior.AskRandomValue(availableValues);
-        }
-        else if (computerBehavior is SmartBehavior smartBehavior)
-        {
-            valueToAskFor = smartBehavior.AskSmart(availableValues);
-        }
-        else
-        {
-            valueToAskFor = availableValues[0];
-            Console.WriteLine("Kom inte hit");
-        }
+        // Console.WriteLine();
+        // foreach (Values value in availableValues)
+        // {
+        //     Console.Write(value);
+        // }
+
+        // // Check if the behavior is RandomBehavior and cast it
+        // if (computerBehavior is RandomBehavior randomBehavior)
+        // {
+        //     // Use AskRandomValue from RandomBehavior
+        //     valueToAskFor = randomBehavior.AskRandomValue(availableValues);
+        // }
+        // else if (computerBehavior is SmartBehavior smartBehavior)
+        // {
+        //     valueToAskFor = smartBehavior.AskSmart(availableValues);
+        // }
+        // else
+        // {
+        //     valueToAskFor = availableValues[0];
+        //     Console.WriteLine("Kom inte hit");
+        // }
+
+        valueToAskFor = computerBehavior.AskForCard(availableValues);
 
         List <Card> pulledOutValues = humanPlayer.PullOutValues(valueToAskFor);
         bool pulledOutValuesIsEmpty = !pulledOutValues.Any();
@@ -242,18 +258,24 @@ public class Game
         computerPlayer.HasQuartette();
 
          
-
-        if (computerPlayer.handIsEmpty())
+        if (!(computerPlayer.handIsEmpty() && stock.Count == 0))
         {
-            computerPlayer.TakeCard(stock.Deal());
-        }
+            if (computerPlayer.handIsEmpty())
+            {
+                computerPlayer.TakeCard(stock.Deal());
+            }
+            if (humanPlayer.handIsEmpty())
+            {
+                humanPlayer.TakeCard(stock.Deal());
+            }
 
-        Console.WriteLine();
-        
+            Console.WriteLine();
+            
 
-        if (!pulledOutValuesIsEmpty)
-        {
-            ComputerPlayerTurn();
+            if (!pulledOutValuesIsEmpty)
+            {
+                ComputerPlayerTurn();
+            }
         }
 
 
