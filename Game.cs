@@ -2,29 +2,23 @@ using System.Linq;
 
 public class Game
 {
-    //private Dictionary<Values, Player> quartettes; 
     public Deck stock; 
 
+
+    Values valueToAskFor = 0;
+
+    public UI UI;
     private HumanPlayer humanPlayer;
     private ComputerPlayer computerPlayer;
+
+    private Printer<Card> cardPrint = new Printer<Card>();
+    private Printer<int> intPrint = new Printer<int>();
+    private Printer<string> stringPrint = new Printer<string>();
 
     public int playCounter = 0;
 
     private Behavior computerBehavior;
-
-    // private IPointSystem simplePointSystem;
-    // private IPointSystem complexPointSystem;
     private IPointSystem pointSystem;
-
-    // public Game(string hPlayerName, string cPlayerName)
-    // {
-
-    //     Deck stock = new Deck();
-    //     HumanPlayer humanPlayer = new HumanPlayer(hPlayerName);
-    //     ComputerPlayer computerPlayer = new ComputerPlayer(cPlayerName);
-
-    // }
-    
     public void Run()
     {
         stock = new Deck();
@@ -45,26 +39,24 @@ public class Game
             pointSystem = new ComplexPointSystem();
         }
 
-        //vill du köra random? if yes:
+        humanPlayer = new HumanPlayer(humanPlayerName);
+        computerPlayer = new ComputerPlayer(computerPlayerName); 
+
         Console.WriteLine("Vill du köra random behavior?");
         if (Console.ReadLine() == "ja")
         {
-            computerBehavior = new RandomBehavior(pointSystem);
+            computerBehavior = new RandomBehavior(pointSystem, humanPlayer, computerPlayer);
         }
         else
         {
-            computerBehavior = new SmartBehavior(pointSystem);
+            computerBehavior = new SmartBehavior(pointSystem, humanPlayer, computerPlayer);
         }
 
-        humanPlayer = new HumanPlayer(humanPlayerName);
-        computerPlayer = new ComputerPlayer(computerPlayerName, computerBehavior); //la till att skicka in compBehavior här ist så rad 56 inte behövs
+        
         Console.WriteLine(humanPlayer.Name + computerPlayer.Name);
         InitialDeal();
 
-        //computerPlayer.SetBehavior(computerBehavior); 
-        
-        
-
+        computerPlayer.SetBehavior(computerBehavior); 
         
         while(stock.Count != 0 || humanPlayer.hand.Count != 0 || computerPlayer.hand.Count != 0)
         {
@@ -96,16 +88,11 @@ public class Game
             humanPlayer.TakeCard(stock.Deal());
         }
 
-        Console.WriteLine();
         Console.WriteLine("\n\n\n\nHuman player turn:");
-        Console.WriteLine();
 
-        Console.WriteLine();
-        Console.WriteLine("Human player hand:");
+        Console.WriteLine("\nHuman player hand:");
         
-        foreach(Card card in humanPlayer.hand){
-            Console.WriteLine(card);
-        }
+        PrintHand(humanPlayer.hand);
 
         Console.Write("Lista av humans fyratal: ");
         foreach (int number in humanPlayer.listOfQuartettes)
@@ -113,21 +100,15 @@ public class Game
             Console.Write($"{number}, ");
         }
 
-
         Console.WriteLine("\n\nCompHand: ");
-        foreach(Card card in computerPlayer.hand)
-        {
-            Console.WriteLine(card);
-        }
+        PrintHand(computerPlayer.hand);
+        
         Console.Write("Lista av comps fyratal: ");
         foreach (int number in computerPlayer.listOfQuartettes)
         {
             Console.Write($"{number}, ");
         }
 
-
-        Console.WriteLine();
-        Values valueToAskFor = 0;
         bool askedInHand = false;
        
         while (askedInHand == false)
@@ -179,6 +160,8 @@ public class Game
             }
 
         }
+
+        computerBehavior.CompareScore();
     }
 
     public void ComputerPlayerTurn()
@@ -187,17 +170,15 @@ public class Game
         {
             computerPlayer.TakeCard(stock.Deal());
         }
-        Console.WriteLine();
-        Console.WriteLine("\n\n\n\nComputer player turn:");
 
-        Console.WriteLine();
-        Console.WriteLine("HumanHand: ");
+        Console.WriteLine("\n\n\nComputer player turn:");
+        Console.WriteLine("\nHumanHand: ");
         foreach(Card card in humanPlayer.hand)
         {
             Console.WriteLine(card);
         }
         
-        Console.Write("Lista av humans fyratal: ");
+        Console.Write("\nLista av humans fyratal: ");
         foreach (int number in humanPlayer.listOfQuartettes)
         {
             Console.Write($"{number}, ");
@@ -217,28 +198,6 @@ public class Game
 
         List<Values> availableValues = computerBehavior.CheckAvailableValues(computerPlayer);
         Values valueToAskFor;
-
-        // Console.WriteLine();
-        // foreach (Values value in availableValues)
-        // {
-        //     Console.Write(value);
-        // }
-
-        // // Check if the behavior is RandomBehavior and cast it
-        // if (computerBehavior is RandomBehavior randomBehavior)
-        // {
-        //     // Use AskRandomValue from RandomBehavior
-        //     valueToAskFor = randomBehavior.AskRandomValue(availableValues);
-        // }
-        // else if (computerBehavior is SmartBehavior smartBehavior)
-        // {
-        //     valueToAskFor = smartBehavior.AskSmart(availableValues);
-        // }
-        // else
-        // {
-        //     valueToAskFor = availableValues[0];
-        //     Console.WriteLine("Kom inte hit");
-        // }
 
         valueToAskFor = computerBehavior.AskForCard(availableValues);
 
@@ -278,14 +237,14 @@ public class Game
             }
         }
 
+        computerBehavior.CompareScore();
+
 
     }
 
     // Dela ut 4 kort var till varje spelare
     public void InitialDeal()
     {
-        
-        //Deck cards = stock.Shuffle();
         stock.Shuffle();
         for (int i = 0; i < 4; i++)
         {
@@ -293,9 +252,14 @@ public class Game
             computerPlayer.TakeCard(stock.Deal());
 
         }
+    }
 
-        // humanPlayer.SortHand(); //funkar detta??
-        // computerPlayer.SortHand();
+    public void PrintHand(List<Card> hand)
+    {
+        foreach(Card card in hand)
+        {
+            cardPrint.PrintCard(card);
+        }
     }
 
     public void AnnounceWinner(IPointSystem pointSystem)

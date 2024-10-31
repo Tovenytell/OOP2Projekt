@@ -72,17 +72,6 @@ public abstract class Player{
                     numbOfCards = 1;
                 }
             }
-              
-            // if (numbOfCards == 4)
-            // {
-
-            //     return true;
-            // }
-                
-            // else
-            // {
-            //     return false;
-            // }
        }
 
     public void SortHand() 
@@ -102,33 +91,30 @@ public abstract class Player{
         }
     }
 
-    public bool ContainsValue(Values value)
-    {
-        foreach (Card card in hand)
-        {
-            if (card.Value == value)
-            {
-                return true;
-            }
-        }
+    
+
+    // public bool ContainsValue(Values value)
+    // {
+    //     foreach (Card card in hand)
+    //     {
+    //         if (card.Value == value)
+    //         {
+    //             return true;
+    //         }
+    //     }
         
-        return false;
-    }
+    //     return false;
+    // }
 
        
        
     
-    public void SortByValue()
-    {
-        hand.Sort(new CompareCardByValue());
-    }
+    // public void SortByValue()
+    // {
+    //     hand.Sort(new CompareCardByValue());
+    // }
 
-    internal object GroupBy(Func<object, object> value)
-    {
-        throw new NotImplementedException();
-    }
-
-    // public IEnumerator<Card> GetEnumerator()
+    // internal object GroupBy(Func<object, object> value)
     // {
     //     throw new NotImplementedException();
     // }

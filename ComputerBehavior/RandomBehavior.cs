@@ -2,7 +2,7 @@
 public class RandomBehavior : Behavior
 {
 
-    public RandomBehavior(IPointSystem pSystem) : base (pSystem)
+    public RandomBehavior(IPointSystem pSystem, Player hPlayer, Player cPlayer) : base (pSystem, hPlayer, cPlayer)
     {
         
     }

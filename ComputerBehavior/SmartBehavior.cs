@@ -1,7 +1,7 @@
 public class SmartBehavior : Behavior
 {
 
-    public SmartBehavior(IPointSystem pSystem) : base (pSystem)
+    public SmartBehavior(IPointSystem pSystem, Player hPlayer, Player cPlayer) : base (pSystem, hPlayer, cPlayer)
     {
         
     }

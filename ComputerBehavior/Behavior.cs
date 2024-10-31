@@ -1,11 +1,18 @@
 public abstract class Behavior
 {
-    IPointSystem pointSystem;
+    public IPointSystem pointSystem;
     public Values lastAskedValue;
 
-    public Behavior(IPointSystem pSystem)
+    Player humanPlayer;
+    Player computerPlayer;
+
+    public int Score {get; private set;} = 0;
+
+    public Behavior(IPointSystem pSystem, Player hPlayer, Player cPlayer)
     {
         pointSystem = pSystem;
+        humanPlayer = hPlayer;
+        computerPlayer = cPlayer;
     }
     public List<Values> CheckAvailableValues(Player computerPlayer)
     {
@@ -26,6 +33,30 @@ public abstract class Behavior
 
         return availableValues;
     }
+
+    public void CompareScore()
+    {
+        if (pointSystem.CalculatePoints(humanPlayer.listOfQuartettes) > pointSystem.CalculatePoints(humanPlayer.listOfQuartettes ))
+        {
+            Console.WriteLine("\nHuman leder!!");
+        }
+        else if (pointSystem.CalculatePoints(humanPlayer.listOfQuartettes) < pointSystem.CalculatePoints(humanPlayer.listOfQuartettes ))
+        {
+            Console.WriteLine("\nComputer leder!");
+        }
+        else
+        {
+            Console.WriteLine("\nDet är lika!");
+        }
+    }
+
+    // public void UpdateScore(List<int> listOfQuartettes)
+    // {
+    //     Score += pointSystem.CalculatePoints(listOfQuartettes);
+    // }
+
+
+    
 
     public bool IsSame(int prevnumber, int currentnumber)
     {
