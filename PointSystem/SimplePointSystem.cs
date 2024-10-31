@@ -1,8 +1,10 @@
 public class SimplePointSystem : IPointSystem
 {
-    int counter = 0;
+    
      public int CalculatePoints(List<int> listOfQuartettes)
      {
+        int counter = 0;
+        
         foreach (int quartette in listOfQuartettes)
         {
             counter++;

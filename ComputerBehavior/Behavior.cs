@@ -39,6 +39,11 @@ public abstract class Behavior
     {
         int humanPlayerPoints = pointSystem.CalculatePoints(humanPlayer.hand.listOfQuartettes);
         int computerPlayerPoints = pointSystem.CalculatePoints(computerPlayer.hand.listOfQuartettes);
+
+        Console.WriteLine("Human player points: " + humanPlayerPoints);
+        Console.WriteLine("Computer player points: " + computerPlayerPoints);
+
+
         
         if (humanPlayerPoints > computerPlayerPoints)
         {

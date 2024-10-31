@@ -1,8 +1,10 @@
 public class ComplexPointSystem : IPointSystem
 {
-    int sumPoints = 0;
+    
     public int CalculatePoints(List<int> listOfQuartettes)
-    {
+    { 
+        int sumPoints = 0;
+        
         foreach (int quartette in listOfQuartettes)
         {
             sumPoints += quartette;

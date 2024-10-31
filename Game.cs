@@ -89,6 +89,11 @@ public class Game
             humanPlayer.TakeCard(stock.Deal());
         }
 
+        if (computerPlayer.handIsEmpty())
+        {
+            computerPlayer.TakeCard(stock.Deal());
+        }
+
         Console.WriteLine("\n\n\n\nHuman player turn:");
 
         Console.WriteLine("\nHuman player hand:");
@@ -171,6 +176,11 @@ public class Game
         if (computerPlayer.handIsEmpty())
         {
             computerPlayer.TakeCard(stock.Deal());
+        }
+
+        if (humanPlayer.handIsEmpty())
+        {
+            humanPlayer.TakeCard(stock.Deal());
         }
 
         Console.WriteLine("\n\n\nComputer player turn:");
