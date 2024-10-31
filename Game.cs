@@ -23,37 +23,57 @@ public class Game
     {
         stock = new Deck();
         
-        //skapa ny player 
+        //Hälsa och skapa players och be HumanPlayer välja PointSystem och datorns Behavior med val och pilar //från chat
         Console.WriteLine("Welcome to our pond, let's go fishing ;D What's your name bestie?");
         string humanPlayerName = Console.ReadLine();
         Console.WriteLine("Vad ska din motståndare heta?");
         string computerPlayerName = Console.ReadLine();
 
+        // Point system selection
         Console.WriteLine("\nVill du köra simple eller complex point system?");
-        if (Console.ReadLine() == "simple")
-        {
-            pointSystem = new SimplePointSystem();
-        }
-        else
-        {
-            pointSystem = new ComplexPointSystem();
-        }
+        string pointSystemChoice = DisplayMenu(new string[] { "Simple", "Complex" });
+        IPointSystem pointSystem = pointSystemChoice == "Simple" ? new SimplePointSystem() : new ComplexPointSystem();
 
         humanPlayer = new HumanPlayer(humanPlayerName);
-        computerPlayer = new ComputerPlayer(computerPlayerName); 
+        computerPlayer = new ComputerPlayer(computerPlayerName);
 
-        Console.WriteLine("Vill du köra random behavior?");
-        if (Console.ReadLine() == "ja")
-        {
-            computerBehavior = new RandomBehavior(pointSystem, humanPlayer, computerPlayer);
-        }
-        else
-        {
-            computerBehavior = new SmartBehavior(pointSystem, humanPlayer, computerPlayer);
-        }
+        // Computer behavior selection
+        Console.WriteLine("\nVill du köra random behavior?");
+        string behaviorChoice = DisplayMenu(new string[] { "Ja", "Nej" });
+        computerBehavior = behaviorChoice == "Ja" 
+            ? new RandomBehavior(pointSystem, humanPlayer, computerPlayer) 
+            : new SmartBehavior(pointSystem, humanPlayer, computerPlayer);
 
-        
-        Console.WriteLine(humanPlayer.Name + computerPlayer.Name);
+
+        //skapa ny player (gamla koden)
+        // Console.WriteLine("Welcome to our pond, let's go fishing ;D What's your name bestie?");
+        // string humanPlayerName = Console.ReadLine();
+        // Console.WriteLine("Vad ska din motståndare heta?");
+        // string computerPlayerName = Console.ReadLine();
+
+        // Console.WriteLine("\nVill du köra simple eller complex point system?");
+        // if (Console.ReadLine() == "simple")
+        // {
+        //     pointSystem = new SimplePointSystem();
+        // }
+        // else
+        // {
+        //     pointSystem = new ComplexPointSystem();
+        // }
+
+        // humanPlayer = new HumanPlayer(humanPlayerName);
+        // computerPlayer = new ComputerPlayer(computerPlayerName); 
+
+        // Console.WriteLine("Vill du köra random behavior?");
+        // if (Console.ReadLine() == "ja")
+        // {
+        //     computerBehavior = new RandomBehavior(pointSystem, humanPlayer, computerPlayer);
+        // }
+        // else
+        // {
+        //     computerBehavior = new SmartBehavior(pointSystem, humanPlayer, computerPlayer);
+        // }
+
         InitialDeal();
 
         computerPlayer.SetBehavior(computerBehavior); 
@@ -239,7 +259,36 @@ public class Game
 
         computerBehavior.CompareScore();
 
+    }
 
+    //Börjat på en generell PlayerTurn metod
+    public void PlayerTurn(Player player)
+    {
+        if (player.handIsEmpty())
+        {
+            player.TakeCard(stock.Deal());
+        }
+
+        Console.WriteLine($"\n {player}'s turn:");
+        Console.WriteLine("\nHuman player hand:");
+        PrintHand(humanPlayer.hand);
+
+        Console.Write($"{humanPlayer.name}'s quartettes: ");
+        PrintQuartettes(humanPlayer.hand.listOfQuartettes);
+
+        Console.WriteLine("\nComputer player hand: ");
+        PrintHand(computerPlayer.hand);
+        
+        Console.Write($"{computerPlayer.name}'s quartettes: ");
+        PrintQuartettes(computerPlayer.hand.listOfQuartettes);
+
+        //Här vill vi skriva att om player är compplayer ska den göra vissa saker tex skapa availibleValues å så
+        //och om den är human ska den göra vissa andra saker tex fråga om vad man vill fråga om
+
+        // if (player is ComputerPlayer compPlayer)
+        // {
+
+        // }
     }
 
     // Dela ut 4 kort var till varje spelare
@@ -288,5 +337,45 @@ public class Game
 
         }
 
+    }
+
+    static string DisplayMenu(string[] options)
+    {
+        int selectedIndex = 0;
+        ConsoleKey key;
+
+        do
+        {
+            Console.Clear();
+            Console.WriteLine("Use arrow keys to navigate and Enter to select.\n");
+
+            for (int i = 0; i < options.Length; i++)
+            {
+                if (i == selectedIndex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("-> " + options[i]);
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.WriteLine("   " + options[i]);
+                }
+            }
+
+            key = Console.ReadKey(true).Key;
+
+            if (key == ConsoleKey.UpArrow)
+            {
+                selectedIndex = (selectedIndex == 0) ? options.Length - 1 : selectedIndex - 1;
+            }
+            else if (key == ConsoleKey.DownArrow)
+            {
+                selectedIndex = (selectedIndex == options.Length - 1) ? 0 : selectedIndex + 1;
+            }
+
+        } while (key != ConsoleKey.Enter);
+
+        return options[selectedIndex];
     }
 }
