@@ -18,9 +18,10 @@ public abstract class Behavior
     {
         //från chat
         // Filter out the last asked value from the current hand
-        Console.WriteLine(lastAskedValue);
+        //Console.WriteLine(lastAskedValue);
         List<Values> availableValues = computerPlayer.hand
             .Select(card => card.Value)
+            .Distinct()
             .Where(value => value != lastAskedValue) // Avoid the last asked value
             .ToList();
 
@@ -29,35 +30,32 @@ public abstract class Behavior
             availableValues = computerPlayer.hand.Select(card => card.Value).Distinct().ToList();
         }
 
-        Console.WriteLine("Filtered available values: " + string.Join(", ", availableValues));
+        Console.WriteLine("\nFiltered available values: " + string.Join(", ", availableValues));
 
         return availableValues;
     }
 
-    public void CompareScore()
+    public int CompareScore()
     {
-        if (pointSystem.CalculatePoints(humanPlayer.listOfQuartettes) > pointSystem.CalculatePoints(humanPlayer.listOfQuartettes ))
+        int humanPlayerPoints = pointSystem.CalculatePoints(humanPlayer.hand.listOfQuartettes);
+        int computerPlayerPoints = pointSystem.CalculatePoints(computerPlayer.hand.listOfQuartettes);
+        
+        if (humanPlayerPoints > computerPlayerPoints)
         {
             Console.WriteLine("\nHuman leder!!");
+            return 1;
         }
-        else if (pointSystem.CalculatePoints(humanPlayer.listOfQuartettes) < pointSystem.CalculatePoints(humanPlayer.listOfQuartettes ))
+        else if (humanPlayerPoints < computerPlayerPoints)
         {
             Console.WriteLine("\nComputer leder!");
+            return 2;
         }
         else
         {
             Console.WriteLine("\nDet är lika!");
+            return 3;
         }
     }
-
-    // public void UpdateScore(List<int> listOfQuartettes)
-    // {
-    //     Score += pointSystem.CalculatePoints(listOfQuartettes);
-    // }
-
-
-    
-
     public bool IsSame(int prevnumber, int currentnumber)
     {
         if (prevnumber == currentnumber) 

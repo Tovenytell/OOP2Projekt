@@ -57,8 +57,9 @@ public class Game
         InitialDeal();
 
         computerPlayer.SetBehavior(computerBehavior); 
+
         
-        while(stock.Count != 0 || humanPlayer.hand.Count != 0 || computerPlayer.hand.Count != 0)
+        while(stock.Count != 0 || humanPlayer.hand.Any() || computerPlayer.hand.Any()) //ändrat
         {
             Console.WriteLine($"\nKort kvar i leken: {stock.Count}");
 
@@ -77,7 +78,7 @@ public class Game
             
         }
 
-        AnnounceWinner(pointSystem);
+        AnnounceWinner(computerBehavior);
 
     }
 
@@ -91,23 +92,16 @@ public class Game
         Console.WriteLine("\n\n\n\nHuman player turn:");
 
         Console.WriteLine("\nHuman player hand:");
-        
         PrintHand(humanPlayer.hand);
 
         Console.Write("Lista av humans fyratal: ");
-        foreach (int number in humanPlayer.listOfQuartettes)
-        {
-            Console.Write($"{number}, ");
-        }
+        PrintQuartettes(humanPlayer.hand.listOfQuartettes);
 
         Console.WriteLine("\n\nCompHand: ");
         PrintHand(computerPlayer.hand);
         
         Console.Write("Lista av comps fyratal: ");
-        foreach (int number in computerPlayer.listOfQuartettes)
-        {
-            Console.Write($"{number}, ");
-        }
+        PrintQuartettes(computerPlayer.hand.listOfQuartettes);
 
         bool askedInHand = false;
        
@@ -116,16 +110,24 @@ public class Game
             Console.WriteLine("\nVad vill du fråga efter? Kortet måste finnas på din hand");
             valueToAskFor = (Values)int.Parse(Console.ReadLine());
         
-        for (int i = 0; i < humanPlayer.hand.Count(); i++)
+        // for (int i = 0; i < humanPlayer.hand.Count(); i++)
+        // {
+        //     if (humanPlayer.hand[i].Value == valueToAskFor)
+        //     {
+        //         askedInHand = true;
+        //     }
+        // }
+
+        foreach (Card card in humanPlayer.hand)
         {
-            if (humanPlayer.hand[i].Value == valueToAskFor)
+            if (card.Value == valueToAskFor)
             {
-                askedInHand = true;
+                askedInHand =  true;
             }
         }
         }
         
-        List <Card> pulledOutValues = computerPlayer.PullOutValues(valueToAskFor);
+        List <Card> pulledOutValues = computerPlayer.hand.PullOutValues(valueToAskFor);
         bool pulledOutValuesIsEmpty = !pulledOutValues.Any();
         if (pulledOutValuesIsEmpty)
         {
@@ -136,8 +138,8 @@ public class Game
             humanPlayer.ReceiveAskedCards(pulledOutValues);
         }
 
-        humanPlayer.SortHand();
-        humanPlayer.HasQuartette();
+        //humanPlayer.SortHand();
+        humanPlayer.hand.HasQuartette();
         // humanPlayer.HasQuartette(humanPlayer.hand);
 
         //kolla efter 4tal och om man har det ska det läggas ner/lagras för point system sen
@@ -172,36 +174,24 @@ public class Game
         }
 
         Console.WriteLine("\n\n\nComputer player turn:");
-        Console.WriteLine("\nHumanHand: ");
-        foreach(Card card in humanPlayer.hand)
-        {
-            Console.WriteLine(card);
-        }
-        
-        Console.Write("\nLista av humans fyratal: ");
-        foreach (int number in humanPlayer.listOfQuartettes)
-        {
-            Console.Write($"{number}, ");
-        }  
+        Console.WriteLine("\nHuman player hand:");
+        PrintHand(humanPlayer.hand);
 
+        Console.Write("Lista av humans fyratal: ");
+        PrintQuartettes(humanPlayer.hand.listOfQuartettes);
 
         Console.WriteLine("\n\nCompHand: ");
-        foreach(Card card in computerPlayer.hand)
-        {
-            Console.WriteLine(card);
-        }
+        PrintHand(computerPlayer.hand);
+        
         Console.Write("Lista av comps fyratal: ");
-        foreach (int number in computerPlayer.listOfQuartettes)
-        {
-            Console.Write($"{number}, ");
-        }
+        PrintQuartettes(computerPlayer.hand.listOfQuartettes);
 
         List<Values> availableValues = computerBehavior.CheckAvailableValues(computerPlayer);
         Values valueToAskFor;
 
         valueToAskFor = computerBehavior.AskForCard(availableValues);
 
-        List <Card> pulledOutValues = humanPlayer.PullOutValues(valueToAskFor);
+        List <Card> pulledOutValues = humanPlayer.hand.PullOutValues(valueToAskFor);
         bool pulledOutValuesIsEmpty = !pulledOutValues.Any();
         if (pulledOutValuesIsEmpty)
         {
@@ -213,8 +203,8 @@ public class Game
         }
 
 
-        computerPlayer.SortHand();
-        computerPlayer.HasQuartette();
+        //computerPlayer.SortHand();
+        computerPlayer.hand.HasQuartette();
 
          
         if (!(computerPlayer.handIsEmpty() && stock.Count == 0))
@@ -254,7 +244,7 @@ public class Game
         }
     }
 
-    public void PrintHand(List<Card> hand)
+    public void PrintHand(Hand hand)
     {
         foreach(Card card in hand)
         {
@@ -262,18 +252,30 @@ public class Game
         }
     }
 
-    public void AnnounceWinner(IPointSystem pointSystem)
+    public void PrintQuartettes(List<int> quartettes)
     {
-        int humanPlayerPoints = pointSystem.CalculatePoints(humanPlayer.listOfQuartettes);
-        int computerPlayerPoints = pointSystem.CalculatePoints(computerPlayer.listOfQuartettes);
+        foreach(int quartette in quartettes)
+        {
+            intPrint.PrintHorizontally(quartette);
+        }
+    }
 
-        if (humanPlayerPoints > computerPlayerPoints)
+    public void AnnounceWinner(Behavior computerBehavior)
+    {
+        int winner = computerBehavior.CompareScore();
+
+        if (winner == 1)
         {
             Console.WriteLine($"Grattis {humanPlayer.name} du har vunnit!");
         }
-        else
+        else if (winner == 2)
         {
             Console.WriteLine("Datorn har vunnit!");
+        }
+        else if (winner == 3)
+        {
+            stringPrint.PrintHorizontally("Det blev oavgjort!");
+
         }
 
     }
