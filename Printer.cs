@@ -27,7 +27,9 @@ public class Printer<T>
     // Prints the input on a new line (default Console.WriteLine behavior)
     public void PrintVertically(T input)
     {
-        Console.WriteLine(input);
+        Console.WriteLine($"\n{input}\n");
+        Console.WriteLine();
+
     }
 
     // Prints the input inline without a newline at the end

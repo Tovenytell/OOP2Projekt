@@ -21,7 +21,6 @@ public abstract class Behavior
         //Console.WriteLine(lastAskedValue);
         List<Values> availableValues = computerPlayer.hand
             .Select(card => card.Value)
-            .Distinct()
             .Where(value => value != lastAskedValue) // Avoid the last asked value
             .ToList();
 

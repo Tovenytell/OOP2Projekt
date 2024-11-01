@@ -85,13 +85,14 @@ public class Game
 
             if(playCounter % 2 == 0)
             {
-                
-                HumanPlayerTurn();
+                PlayerTurn(humanPlayer);
+                //HumanPlayerTurn();
             }
 
             else 
             {
-                ComputerPlayerTurn();
+                PlayerTurn(computerPlayer);
+                //ComputerPlayerTurn();
             }
             
             playCounter++;
@@ -102,193 +103,268 @@ public class Game
 
     }
 
-    public void HumanPlayerTurn()
-    {
-        if (humanPlayer.handIsEmpty())
-        {
-            humanPlayer.TakeCard(stock.Deal());
-        }
-
-        if (computerPlayer.handIsEmpty())
-        {
-            computerPlayer.TakeCard(stock.Deal());
-        }
-
-        Console.WriteLine("\n\n\n\nHuman player turn:");
-
-        Console.WriteLine("\nHuman player hand:");
-        PrintHand(humanPlayer.hand);
-
-        Console.Write("Lista av humans fyratal: ");
-        PrintQuartettes(humanPlayer.hand.listOfQuartettes);
-
-        Console.WriteLine("\n\nCompHand: ");
-        PrintHand(computerPlayer.hand);
+    // public void HumanPlayerTurn()
+    // {
         
-        Console.Write("Lista av comps fyratal: ");
-        PrintQuartettes(computerPlayer.hand.listOfQuartettes);
+    //     if (humanPlayer.handIsEmpty())
+    //     {
+    //         humanPlayer.TakeCard(stock.Deal());
+    //     }
 
-        bool askedInHand = false;
+    //     if (computerPlayer.handIsEmpty())
+    //     {
+    //         computerPlayer.TakeCard(stock.Deal());
+    //     }
+
+    //     Console.WriteLine("\n\n\n\nHuman player turn:");
+
+    //     Console.WriteLine("\nHuman player hand:");
+    //     PrintHand(humanPlayer.hand);
+
+    //     Console.Write("Lista av humans fyratal: ");
+    //     PrintQuartettes(humanPlayer.hand.listOfQuartettes);
+
+    //     Console.WriteLine("\n\nCompHand: ");
+    //     PrintHand(computerPlayer.hand);
+        
+    //     Console.Write("Lista av comps fyratal: ");
+    //     PrintQuartettes(computerPlayer.hand.listOfQuartettes);
+
+    //     bool askedInHand = false;
        
-        while (askedInHand == false)
-        {
-            Console.WriteLine("\nVad vill du fråga efter? Kortet måste finnas på din hand");
-            valueToAskFor = (Values)int.Parse(Console.ReadLine());
+    //     while (askedInHand == false)
+    //     {
+    //         Console.WriteLine("\nVad vill du fråga efter? Kortet måste finnas på din hand");
+    //         valueToAskFor = (Values)int.Parse(Console.ReadLine());
         
-        // for (int i = 0; i < humanPlayer.hand.Count(); i++)
-        // {
-        //     if (humanPlayer.hand[i].Value == valueToAskFor)
-        //     {
-        //         askedInHand = true;
-        //     }
-        // }
+    //     // for (int i = 0; i < humanPlayer.hand.Count(); i++)
+    //     // {
+    //     //     if (humanPlayer.hand[i].Value == valueToAskFor)
+    //     //     {
+    //     //         askedInHand = true;
+    //     //     }
+    //     // }
 
-        foreach (Card card in humanPlayer.hand)
-        {
-            if (card.Value == valueToAskFor)
-            {
-                askedInHand =  true;
-            }
-        }
-        }
+    //     foreach (Card card in humanPlayer.hand)
+    //     {
+    //         if (card.Value == valueToAskFor)
+    //         {
+    //             askedInHand =  true;
+    //         }
+    //     }
+    //     }
         
-        List <Card> pulledOutValues = computerPlayer.hand.PullOutValues(valueToAskFor);
-        bool pulledOutValuesIsEmpty = !pulledOutValues.Any();
-        if (pulledOutValuesIsEmpty)
-        {
-            humanPlayer.TakeCard(stock.Deal());
-        }
-        else
-        {
-            humanPlayer.ReceiveAskedCards(pulledOutValues);
-        }
+    //     List <Card> pulledOutValues = computerPlayer.hand.PullOutValues(valueToAskFor);
+    //     bool pulledOutValuesIsEmpty = !pulledOutValues.Any();
+    //     if (pulledOutValuesIsEmpty)
+    //     {
+    //         humanPlayer.TakeCard(stock.Deal());
+    //     }
+    //     else
+    //     {
+    //         humanPlayer.ReceiveAskedCards(pulledOutValues);
+    //     }
 
-        //humanPlayer.SortHand();
-        humanPlayer.hand.HasQuartette();
-        // humanPlayer.HasQuartette(humanPlayer.hand);
+    //     //humanPlayer.SortHand();
+    //     humanPlayer.hand.HasQuartette();
+    //     // humanPlayer.HasQuartette(humanPlayer.hand);
 
-        //kolla efter 4tal och om man har det ska det läggas ner/lagras för point system sen
+    //     //kolla efter 4tal och om man har det ska det läggas ner/lagras för point system sen
 
-        if (!(humanPlayer.handIsEmpty() && stock.Count == 0))
-        {
-                if (humanPlayer.handIsEmpty())
-            {
-                humanPlayer.TakeCard(stock.Deal());
-            }
+    //     if (!(humanPlayer.handIsEmpty() && stock.Count == 0))
+    //     {
+    //             if (humanPlayer.handIsEmpty())
+    //         {
+    //             humanPlayer.TakeCard(stock.Deal());
+    //         }
 
-            if (computerPlayer.handIsEmpty())
-            {
-                humanPlayer.TakeCard(stock.Deal());
-            }
+    //         if (computerPlayer.handIsEmpty())
+    //         {
+    //             humanPlayer.TakeCard(stock.Deal());
+    //         }
 
-            if (!pulledOutValuesIsEmpty)
-            {
-                HumanPlayerTurn();
-            }
+    //         if (!pulledOutValuesIsEmpty)
+    //         {
+    //             HumanPlayerTurn();
+    //         }
 
-        }
+    //     }
 
-        computerBehavior.CompareScore();
-    }
+    //     computerBehavior.CompareScore();
+    // }
 
-    public void ComputerPlayerTurn()
-    {
-        if (computerPlayer.handIsEmpty())
-        {
-            computerPlayer.TakeCard(stock.Deal());
-        }
+    // public void ComputerPlayerTurn()
+    // {
+    //     if (computerPlayer.handIsEmpty())
+    //     {
+    //         computerPlayer.TakeCard(stock.Deal());
+    //     }
 
-        if (humanPlayer.handIsEmpty())
-        {
-            humanPlayer.TakeCard(stock.Deal());
-        }
+    //     if (humanPlayer.handIsEmpty())
+    //     {
+    //         humanPlayer.TakeCard(stock.Deal());
+    //     }
 
-        Console.WriteLine("\n\n\nComputer player turn:");
-        Console.WriteLine("\nHuman player hand:");
-        PrintHand(humanPlayer.hand);
+    //     Console.WriteLine("\n\n\nComputer player turn:");
+    //     Console.WriteLine("\nHuman player hand:");
+    //     PrintHand(humanPlayer.hand);
 
-        Console.Write("Lista av humans fyratal: ");
-        PrintQuartettes(humanPlayer.hand.listOfQuartettes);
+    //     Console.Write("Lista av humans fyratal: ");
+    //     PrintQuartettes(humanPlayer.hand.listOfQuartettes);
 
-        Console.WriteLine("\n\nCompHand: ");
-        PrintHand(computerPlayer.hand);
+    //     Console.WriteLine("\n\nCompHand: ");
+    //     PrintHand(computerPlayer.hand);
         
-        Console.Write("Lista av comps fyratal: ");
-        PrintQuartettes(computerPlayer.hand.listOfQuartettes);
+    //     Console.Write("Lista av comps fyratal: ");
+    //     PrintQuartettes(computerPlayer.hand.listOfQuartettes);
 
-        List<Values> availableValues = computerBehavior.CheckAvailableValues(computerPlayer);
-        Values valueToAskFor;
+    //     List<Values> availableValues = computerBehavior.CheckAvailableValues(computerPlayer);
+    //     Values valueToAskFor;
 
-        valueToAskFor = computerBehavior.AskForCard(availableValues);
+    //     valueToAskFor = computerBehavior.AskForCard(availableValues);
 
-        List <Card> pulledOutValues = humanPlayer.hand.PullOutValues(valueToAskFor);
-        bool pulledOutValuesIsEmpty = !pulledOutValues.Any();
-        if (pulledOutValuesIsEmpty)
-        {
-            computerPlayer.TakeCard(stock.Deal());
-        }
-        else
-        {
-            computerPlayer.ReceiveAskedCards(pulledOutValues);
-        }
+    //     List <Card> pulledOutValues = humanPlayer.hand.PullOutValues(valueToAskFor);
+    //     bool pulledOutValuesIsEmpty = !pulledOutValues.Any();
+    //     if (pulledOutValuesIsEmpty)
+    //     {
+    //         computerPlayer.TakeCard(stock.Deal());
+    //     }
+    //     else
+    //     {
+    //         computerPlayer.ReceiveAskedCards(pulledOutValues);
+    //     }
 
 
-        //computerPlayer.SortHand();
-        computerPlayer.hand.HasQuartette();
+    //     //computerPlayer.SortHand();
+    //     computerPlayer.hand.HasQuartette();
 
          
-        if (!(computerPlayer.handIsEmpty() && stock.Count == 0))
-        {
-            if (computerPlayer.handIsEmpty())
-            {
-                computerPlayer.TakeCard(stock.Deal());
-            }
-            if (humanPlayer.handIsEmpty())
-            {
-                humanPlayer.TakeCard(stock.Deal());
-            }
+    //     if (!(computerPlayer.handIsEmpty() && stock.Count == 0))
+    //     {
+    //         if (computerPlayer.handIsEmpty())
+    //         {
+    //             computerPlayer.TakeCard(stock.Deal());
+    //         }
+    //         if (humanPlayer.handIsEmpty())
+    //         {
+    //             humanPlayer.TakeCard(stock.Deal());
+    //         }
 
-            Console.WriteLine();
+    //         Console.WriteLine();
             
 
-            if (!pulledOutValuesIsEmpty)
-            {
-                ComputerPlayerTurn();
-            }
-        }
+    //         if (!pulledOutValuesIsEmpty)
+    //         {
+    //             ComputerPlayerTurn();
+    //         }
+    //     }
 
-        computerBehavior.CompareScore();
+    //     computerBehavior.CompareScore();
 
-    }
+    // }
 
     //Börjat på en generell PlayerTurn metod
     public void PlayerTurn(Player player)
     {
+        Player opponent = player is HumanPlayer ? (Player)computerPlayer : humanPlayer;
+
         if (player.handIsEmpty())
         {
             player.TakeCard(stock.Deal());
         }
 
-        Console.WriteLine($"\n {player}'s turn:");
-        Console.WriteLine("\nHuman player hand:");
-        PrintHand(humanPlayer.hand);
+        if (opponent.handIsEmpty())
+        {
+            opponent.TakeCard(stock.Deal());
+        }
 
-        Console.Write($"{humanPlayer.name}'s quartettes: ");
-        PrintQuartettes(humanPlayer.hand.listOfQuartettes);
+        PrintHandsAndQuartettes(player);
 
-        Console.WriteLine("\nComputer player hand: ");
-        PrintHand(computerPlayer.hand);
+        // Console.WriteLine($"\n\n\n{(player is HumanPlayer ? "Human" : "Computer")}'s player turn:");
+        // Console.WriteLine("\nHuman player hand:");
+        // PrintHand(humanPlayer.hand);
+
+        // Console.Write($"{humanPlayer.name}'s quartettes: ");
+        // PrintQuartettes(humanPlayer.hand.listOfQuartettes);
+
+        // Console.WriteLine("\nComputer player hand: ");
+        // PrintHand(computerPlayer.hand);
         
-        Console.Write($"{computerPlayer.name}'s quartettes: ");
-        PrintQuartettes(computerPlayer.hand.listOfQuartettes);
+        // Console.Write($"{computerPlayer.name}'s quartettes: ");
+        // PrintQuartettes(computerPlayer.hand.listOfQuartettes);
 
         //Här vill vi skriva att om player är compplayer ska den göra vissa saker tex skapa availibleValues å så
         //och om den är human ska den göra vissa andra saker tex fråga om vad man vill fråga om
 
-        // if (player is ComputerPlayer compPlayer)
-        // {
+        Values valueToAskFor = 0;
 
-        // }
+        // Different logic for HumanPlayer and ComputerPlayer
+        if (player is HumanPlayer)
+        {
+            bool askedInHand = false;
+            while (!askedInHand)
+            {
+                Console.WriteLine("\nVad vill du fråga efter? Kortet måste finnas på din hand");
+                valueToAskFor = (Values)int.Parse(Console.ReadLine());
+
+                foreach (Card card in player.hand)
+                {
+                    if (card.Value == valueToAskFor)
+                    {
+                        askedInHand = true;
+                        break;
+                    }
+                }
+            }
+        }
+        else // ComputerPlayer logic
+        {
+            List<Values> availableValues = computerBehavior.CheckAvailableValues((ComputerPlayer)player);
+            valueToAskFor = computerBehavior.AskForCard(availableValues);
+        }
+
+        // Attempt to pull out cards from the opponent's hand
+        List<Card> pulledOutValues = opponent.hand.PullOutValues(valueToAskFor);
+        bool pulledOutValuesIsEmpty = !pulledOutValues.Any();
+
+        if (pulledOutValuesIsEmpty)
+        {
+            player.TakeCard(stock.Deal());
+        }
+        else
+        {
+            player.ReceiveAskedCards(pulledOutValues);
+        }
+
+        // Check for quartets in player's hand
+        player.hand.HasQuartette();
+
+        // Continue turn if there are still cards available in hand or stock
+        if (!(player.handIsEmpty() && stock.Count == 0))
+        {
+            if (player.handIsEmpty())
+            {
+                player.TakeCard(stock.Deal());
+            }
+            if (opponent.handIsEmpty())
+            {
+                opponent.TakeCard(stock.Deal());
+            }
+
+            // If cards were successfully taken, continue the same player's turn
+            if (!pulledOutValuesIsEmpty)
+            {
+                computerBehavior.CompareScore();
+                PlayerTurn(player);
+                
+            }
+            else
+            {
+                computerBehavior.CompareScore();
+            }
+        }
+
+        
     }
 
     // Dela ut 4 kort var till varje spelare
@@ -377,5 +453,23 @@ public class Game
         } while (key != ConsoleKey.Enter);
 
         return options[selectedIndex];
+    }
+
+    public void PrintHandsAndQuartettes(Player player)
+    {
+        Console.WriteLine($"\n\n\n{(player is HumanPlayer ? "Human" : "Computer")}'s player turn:");
+        Console.WriteLine("\nHuman player hand:");
+        PrintHand(humanPlayer.hand);
+
+        Console.Write($"{humanPlayer.name}'s quartettes: ");
+        PrintQuartettes(humanPlayer.hand.listOfQuartettes);
+
+        Console.WriteLine("\nComputer player hand: ");
+        PrintHand(computerPlayer.hand);
+        
+        Console.Write($"{computerPlayer.name}'s quartettes: ");
+        PrintQuartettes(computerPlayer.hand.listOfQuartettes);
+
+
     }
 }
