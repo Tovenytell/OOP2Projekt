@@ -1,5 +1,12 @@
-public class Printer<T>
+public class Printer<T> // KRAV #1:
+//Koncept: Generics
+//Vi använder den generiska typen Printer<T> genom att skapa olika typer av printers i Game för att 
+//kunna printa ut olika typer, till exempel kunna printa ut typen Hand och int
+//Vi använder det för att kunna printa ut olika typer. Skulle vi i famtiden vilja kunna printa ut andra typer av kort
+//t.ex. en UNO-kortlek kan detta även vara användbart.
 {
+
+    //från chat
     private readonly Dictionary<Suits, string> suitIcons = new Dictionary<Suits, string>
     {
         { Suits.Hearts, "♥" },
@@ -8,6 +15,7 @@ public class Printer<T>
         { Suits.Clubs, "♣" }
     };
 
+    //från chat
     private readonly Dictionary<Values, string> valueIcons = new Dictionary<Values, string>
     {
         { Values.Ace, "1" },       // Ace as "1"
@@ -24,42 +32,46 @@ public class Printer<T>
         { Values.Queen, "12" },    // Queen as "12"
         { Values.King, "13" }      // King as "13"
     };
-    // Prints the input on a new line (default Console.WriteLine behavior)
+ 
     public void PrintVertically(T input)
     {
         Console.WriteLine($"\n{input}\n");
         Console.WriteLine();
-
     }
 
-    // Prints the input inline without a newline at the end
+
     public void PrintHorizontally(T input)
     {
         Console.Write(input + ", ");
     }
 
-    // Specialized pretty-print method for "Card" type if applicable
+
     public void PrintCard(T input)
     {
         if (input is Card card)
         {
-            // Console.WriteLine("╔══════════╗");
-            // Console.WriteLine($"║ {card.Value,-8} ║");
-            // Console.WriteLine($"║ of       ║");
-            // Console.WriteLine($"║ {card.Suit,-8} ║");
-            // Console.WriteLine("╚══════════╝");
-
             string value = valueIcons.ContainsKey(card.Value) ? valueIcons[card.Value] : card.Value.ToString();
             string suitIcon = suitIcons.ContainsKey(card.Suit) ? suitIcons[card.Suit] : card.Suit.ToString();
-
-            // Print the value with the suit icon
-            Console.Write($"|{value}{suitIcon}| ");
             
+            if (card.Suit == Suits.Hearts || card.Suit == Suits.Diamonds)
+            {
+                Console.ForegroundColor = ConsoleColor.Red; 
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Black; 
+            }
+
+   
+        Console.Write($"|{value}{suitIcon}| ");
+
+
+        Console.ResetColor();
         }
 
         else
         {
-            Console.WriteLine(input);  // Fallback for non-card types
+            Console.WriteLine(input);
         }
     }
 }

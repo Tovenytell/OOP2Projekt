@@ -1,8 +1,8 @@
 public class SimplePointSystem : IPointSystem
 {
     
-     public int CalculatePoints(List<int> listOfQuartettes)
-     {
+    public int CalculatePoints(List<int> listOfQuartettes)
+    {
         int counter = 0;
         
         foreach (int quartette in listOfQuartettes)
@@ -11,5 +11,5 @@ public class SimplePointSystem : IPointSystem
         }
 
         return counter;
-     }
+    }
 }

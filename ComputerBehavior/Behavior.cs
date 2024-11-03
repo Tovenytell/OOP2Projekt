@@ -1,4 +1,9 @@
-public abstract class Behavior
+public abstract class Behavior //KRAV #2
+//Koncept: Strategy pattern
+//Vi använder det genom att det finns två olika typer av Behavior (Smart och Random) som ärver av den abstrakta klassen Behavior. 
+//Vi har alltså abstraherat en ComputerPlayers olika beteenden till olika typer av Behaviors
+//Vi använder detta för att kunna skapa variande spel och ett program som enkelt går att underhålla och utveckla
+//om man vill ha fler beteenden i framtiden
 {
     public IPointSystem pointSystem;
     public Values lastAskedValue;
@@ -16,20 +21,22 @@ public abstract class Behavior
     }
     public List<Values> CheckAvailableValues(Player computerPlayer)
     {
-        //från chat
-        // Filter out the last asked value from the current hand
-        //Console.WriteLine(lastAskedValue);
+        // KRAV 5
+        // Koncept: LINQ 
+        // Vi använder LINQ genom att gå igenom spelarens hand och hitta korten som 
+        // uppfyller ett visst krav, exempelvis att det inte får vara lika som det 
+        // senast frågade kortet. 
+        // Vi använder LINQ för att på ett enkelt sätt kunna filtrera korten och 
+        // enkelt hitta det vi vill ha/identifiera det vi inte vill ha. 
         List<Values> availableValues = computerPlayer.hand
             .Select(card => card.Value)
-            .Where(value => value != lastAskedValue) // Avoid the last asked value
+            .Where(value => value != lastAskedValue) 
             .ToList();
 
         if (availableValues.Count == 0)
         {
             availableValues = computerPlayer.hand.Select(card => card.Value).Distinct().ToList();
         }
-
-        Console.WriteLine("\nFiltered available values: " + string.Join(", ", availableValues));
 
         return availableValues;
     }
@@ -39,24 +46,24 @@ public abstract class Behavior
         int humanPlayerPoints = pointSystem.CalculatePoints(humanPlayer.hand.listOfQuartettes);
         int computerPlayerPoints = pointSystem.CalculatePoints(computerPlayer.hand.listOfQuartettes);
 
-        Console.WriteLine("Human player points: " + humanPlayerPoints);
-        Console.WriteLine("Computer player points: " + computerPlayerPoints);
+        Console.WriteLine("\nYour points: " + humanPlayerPoints);
+        Console.WriteLine("Torsten's points: " + computerPlayerPoints);
 
 
         
         if (humanPlayerPoints > computerPlayerPoints)
         {
-            Console.WriteLine("\nHuman leder!!");
+            Console.WriteLine("\nYou're in the lead!");
             return 1;
         }
         else if (humanPlayerPoints < computerPlayerPoints)
         {
-            Console.WriteLine("\nComputer leder!");
+            Console.WriteLine("\nTorsten is in the lead!");
             return 2;
         }
         else
         {
-            Console.WriteLine("\nDet är lika!");
+            Console.WriteLine("\nIt's a tie!");
             return 3;
         }
     }
