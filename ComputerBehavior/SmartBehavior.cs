@@ -1,9 +1,10 @@
 public class SmartBehavior : Behavior
 {
+    public readonly List<PreviousMoves> moves;
 
-    public SmartBehavior(IPointSystem pSystem, Player hPlayer, Player cPlayer) : base (pSystem, hPlayer, cPlayer)
+    public SmartBehavior(List<PreviousMoves> moves)/*, IPointSystem pSystem, Player hPlayer, Player cPlayer) : base (pSystem, hPlayer, cPlayer)*/
     {
-        
+        this.moves = moves;
     }
     public override Values AskForCard(List<Values> availableValues)
     {
@@ -45,6 +46,13 @@ public class SmartBehavior : Behavior
         lastAskedValue = selectedRank;
 
         Console.WriteLine($"\n\nTorsten asks: Do you have any {selectedRank}s?");
+        
+        moves.Add(new PreviousMoves
+        {
+            PlayerName = "Torsten",
+            Action = $"Asked for {selectedRank}s"
+        });
+
         return selectedRank;
     }
         

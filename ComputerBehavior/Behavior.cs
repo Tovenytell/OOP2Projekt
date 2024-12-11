@@ -5,21 +5,21 @@ public abstract class Behavior //KRAV #2
 //Vi använder detta för att kunna skapa variande spel och ett program som enkelt går att underhålla och utveckla
 //om man vill ha fler beteenden i framtiden
 {
-    public IPointSystem pointSystem;
+    //public IPointSystem pointSystem;
     public Values lastAskedValue;
 
-    Player humanPlayer;
-    Player computerPlayer;
+    // Player humanPlayer;
+    // Player computerPlayer;
 
     public int Score {get; private set;} = 0;
 
-    public Behavior(IPointSystem pSystem, Player hPlayer, Player cPlayer)
-    {
-        pointSystem = pSystem;
-        humanPlayer = hPlayer;
-        computerPlayer = cPlayer;
-    }
-    public List<Values> CheckAvailableValues(Player computerPlayer)
+    // public Behavior(IPointSystem pSystem, Player hPlayer, Player cPlayer)
+    // {
+    //     pointSystem = pSystem;
+    //     humanPlayer = hPlayer;
+    //     computerPlayer = cPlayer;
+    // }
+    public List<Values> CheckAvailableValues(Player player)
     {
         // KRAV 5
         // Koncept: LINQ 
@@ -28,20 +28,20 @@ public abstract class Behavior //KRAV #2
         // senast frågade kortet. 
         // Vi använder LINQ för att på ett enkelt sätt kunna filtrera korten och 
         // enkelt hitta det vi vill ha/identifiera det vi inte vill ha. 
-        List<Values> availableValues = computerPlayer.hand
+        List<Values> availableValues = player.hand
             .Select(card => card.Value)
             .Where(value => value != lastAskedValue) 
             .ToList();
 
         if (availableValues.Count == 0)
         {
-            availableValues = computerPlayer.hand.Select(card => card.Value).Distinct().ToList();
+            availableValues = player.hand.Select(card => card.Value).Distinct().ToList();
         }
 
         return availableValues;
     }
 
-    public int CompareScore()
+    public int CompareScore(IPointSystem pointSystem, Player humanPlayer, Player computerPlayer)
     {
         int humanPlayerPoints = pointSystem.CalculatePoints(humanPlayer.hand.listOfQuartettes);
         int computerPlayerPoints = pointSystem.CalculatePoints(computerPlayer.hand.listOfQuartettes);

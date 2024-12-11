@@ -59,7 +59,7 @@ public class Printer<T> // KRAV #1:
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Black; 
+                Console.ForegroundColor = ConsoleColor.White; 
             }
 
    

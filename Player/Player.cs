@@ -1,22 +1,31 @@
 using System.Text.RegularExpressions;
+using System.Text.Json.Serialization;
 
 public abstract class Player
 {
     public string Name {get; set;}
 
+    public Behavior behavior;
+
+    [JsonIgnore]
     public Hand hand {get; private set;}
      
 
-    public Player(string name)
+    public Player()
     {
-        this.Name = name;
+        //this.Name = name;
         hand = new Hand();
+
     }
     public void TakeCard (Card card) 
     {   
         hand.Add(card); 
     }
    
+    public void SetBehavior(Behavior playerBehavior)
+    {
+        behavior = playerBehavior;
+    }
 
     public void ReceiveAskedCards(List<Card> askedCards)
     {

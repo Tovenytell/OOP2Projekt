@@ -4,17 +4,42 @@ public class Game
 {
     
     public Deck stock; 
-    private HumanPlayer humanPlayer;
-    private ComputerPlayer computerPlayer;
+    private static HumanPlayer humanPlayer;
+    private static ComputerPlayer computerPlayer;
 
+    // Declare the moves list
+    private readonly List<PreviousMoves> moves = new List<PreviousMoves>();
+    
+    private readonly FileHandler<List<PreviousMoves>> moveHandler = new FileHandler<List<PreviousMoves>>();
+
+    // private readonly FileHandler<List<PreviousScores>> scoreHandler = new FileHandler<List<PreviousScores>>();
+    // private const string ScoreLogFilePath = "scores.json";
+    // private readonly List<PreviousScores> highScores = new List<PreviousScores>();
+
+    private readonly FileHandler<List<PlayerWins>> winsHandler = new FileHandler<List<PlayerWins>>();
+    private const string WinsLogFilePath = "wins.json";
+    private readonly List<PlayerWins> playerWins = new List<PlayerWins>();
+
+    // private readonly List<PlayerWins> playerWins = new List<PlayerWins>
+    // {
+    //     new PlayerWins { Player = humanPlayer, Wins = 0 },
+    //     new PlayerWins { Player = computerPlayer, Wins = 0 }
+    // };
+
+    public Player player;
     private Printer<Card> cardPrint = new Printer<Card>();
     private Printer<int> intPrint = new Printer<int>();
     private Printer<string> stringPrint = new Printer<string>();
 
+    IPointSystem pointSystem;
     public int playCounter = 0;
     private Behavior computerBehavior;
     public void Run()
     {
+        moves.Clear();
+        moveHandler.Save(moves, "moves.json");
+
+        Console.Clear();
         stock = new Deck();
         
         //Hälsa och skapa players och be HumanPlayer välja PointSystem och datorns Behavior med val och pilar
@@ -41,24 +66,35 @@ public class Game
                 }
         }
         string pointSystemChoice = DisplayMenu(new string[] { "Simple point system", "Complex point system" });
-        IPointSystem pointSystem = pointSystemChoice == "Simple point system" ? new SimplePointSystem() : new ComplexPointSystem();
+        pointSystem = pointSystemChoice == "Simple point system" ? new SimplePointSystem() : new ComplexPointSystem();
 
-        humanPlayer = new HumanPlayer(humanPlayerName);
-        computerPlayer = new ComputerPlayer("Torsten");
+        humanPlayer = new HumanPlayer();
+        computerPlayer = new ComputerPlayer();
+
+        humanPlayer.Name = "Human player";
+        computerPlayer.Name = "Torsten";
 
         string behaviorChoice = DisplayMenu(new string[] { "Random computer behavior", "Smart computer behavior" });
         computerBehavior = behaviorChoice == "Random computer behavior" 
-            ? new RandomBehavior(pointSystem, humanPlayer, computerPlayer) 
-            : new SmartBehavior(pointSystem, humanPlayer, computerPlayer);
+            ? new RandomBehavior(moves/*, pointSystem, humanPlayer, computerPlayer*/) 
+            : new SmartBehavior(moves/*, pointSystem, humanPlayer, computerPlayer*/);
+
+        Console.WriteLine("Do you want help deciding what card to ask for? (y/n)");
+        string helpDesicion = Console.ReadLine();
+        if (helpDesicion?.ToLower() == "y")
+        {
+            humanPlayer.SetBehavior(new HelpBehavior());
+        }
         
-        Console.WriteLine($"\nYou're playing against the fishmaster {computerPlayer.name}! Good luck!\n");
+        Console.WriteLine($"\nYou're playing against the fishmaster {computerPlayer.Name}! Good luck!\n");
 
         InitialDeal();
 
         computerPlayer.SetBehavior(computerBehavior); 
-
         
-        while(stock.Count != 0 || humanPlayer.hand.Any() || computerPlayer.hand.Any()) //ändrat
+        
+        
+        while(stock.Count != 0 || humanPlayer.hand.Any() || computerPlayer.hand.Any()) 
         {
             Console.WriteLine($"\nCards left in the pond: {stock.Count}");
 
@@ -66,7 +102,7 @@ public class Game
             {
                 PlayerTurn(humanPlayer);
                 Console.Clear();
-               
+
             }
 
             else 
@@ -75,15 +111,35 @@ public class Game
             }
 
             playCounter++;
+            moveHandler.Save(moves, "moves.json");
             
         }
 
-        AnnounceWinner(computerBehavior);
-
+        //AnnounceWinner(computerBehavior);
+        Player winner = AnnounceWinner(computerBehavior);
+        UpdateWins(winner);
+        SaveWins();
+        PromptPreviousWins();
+        Console.WriteLine("Would you like to play again? y/n");
+        string input = Console.ReadLine();
+        if (input?.ToLower() == "y")
+        {
+            
+            Run();
+        }
+        // else
+        // {
+        //     // Final cleanup if game is exiting
+        //     moves.Clear(); // Clear the in-memory list
+        //     moveHandler.Save(moves, "moves.json"); // Save the empty list to reset the file
+        // }
+        
     }
 
     public void PlayerTurn(Player player)
     {
+        
+
         Player opponent = player is HumanPlayer ? (Player)computerPlayer : humanPlayer;
 
         if (player.handIsEmpty())
@@ -96,24 +152,55 @@ public class Game
             opponent.TakeCard(stock.Deal());
         }
 
+        
         PrintHandsAndQuartettes(player);
         Values valueToAskFor = 0;
 
         if (player is HumanPlayer)
         {
-            bool askedInHand = false;
-    
-            while (!askedInHand)
+            if (player.behavior is HelpBehavior helpBehavior)
             {
-                bool validInput = false;
+                List<Values> suggestedValues = helpBehavior.GetSuggestedValues(player, "moves.json");
                 
-                while (!validInput)
+                valueToAskFor = player.behavior.AskForCard(suggestedValues);//detta ska sparas i en Values variabel?
+                //denna variabel ska sen användas för att plocka det kortet från datorns hand
+            }
+
+            else 
+            {
+                bool askedInHand = false;
+        
+                while (!askedInHand)
                 {
+                    bool validInput = false;
+                    
+                    while (!validInput)
+                    {
+                            
+                        Console.WriteLine("Do you want to see the previous moves? (y/n)");
+                        string input = Console.ReadLine();
+                        if (input?.ToLower() == "y")
+                        {
+                            try
+                            {
+                                var previousMoves = moveHandler.Load("moves.json");
+                                moveHandler.DisplayLog(previousMoves);
+                            }
+                            catch (FileNotFoundException)
+                            {
+                                Console.WriteLine("No previous moves found.");
+                            }
+                        }
+
+                        
+                        
+
+                        
                         Console.WriteLine("\nWhat card would you like to ask for? The value must already be in your hand");
                         Console.WriteLine("Enter a number between 1 and 13");
                         
-                        string input = Console.ReadLine();
-                        if (int.TryParse(input, out int parsedValue))
+                        string input2 = Console.ReadLine();
+                        if (int.TryParse(input2, out int parsedValue))
                         {
                             
                             if (Enum.IsDefined(typeof(Values), parsedValue))
@@ -130,27 +217,29 @@ public class Game
                         {
                             Console.WriteLine("Incorrect input, please try again");
                         }
-                }
-                    foreach (Card card in humanPlayer.hand)
-                    {
-                            if (card.Value == valueToAskFor)
-                            {
-                                askedInHand = true;
-                                break;
-                            }
                     }
-                        
-                    if (!askedInHand)
-                    {
+                        foreach (Card card in humanPlayer.hand)
+                        {
+                                if (card.Value == valueToAskFor)
+                                {
+                                    askedInHand = true;
+                                    break;
+                                }
+                        }
+                            
+                        if (!askedInHand)
+                        {
                             Console.WriteLine("You don't have that card on your hand, please try again");
                             valueToAskFor = 0; 
-                    }
+                        }
                 }
+            }
         }
         else 
         {
             List<Values> availableValues = computerBehavior.CheckAvailableValues((ComputerPlayer)player);
-            valueToAskFor = computerBehavior.AskForCard(availableValues);
+            computerPlayer.Think();
+            valueToAskFor = player.behavior.AskForCard(availableValues);
         }
 
         List<Card> pulledOutValues = opponent.hand.PullOutValues(valueToAskFor);
@@ -182,12 +271,12 @@ public class Game
 
             if (!pulledOutValuesIsEmpty)
             {
-                computerBehavior.CompareScore();
+                computerBehavior.CompareScore(pointSystem, humanPlayer, computerPlayer);
                 PlayerTurn(player);
             }
             else
             {
-                computerBehavior.CompareScore();
+                computerBehavior.CompareScore(pointSystem, humanPlayer, computerPlayer);
                 
             }
         }
@@ -221,25 +310,99 @@ public class Game
         }
     }
 
-    public void AnnounceWinner(Behavior computerBehavior)
+    public Player AnnounceWinner(Behavior computerBehavior)
     {
-        int winner = computerBehavior.CompareScore();
+        int winner = computerBehavior.CompareScore(pointSystem, humanPlayer, computerPlayer);
         Console.ForegroundColor = ConsoleColor.Yellow;
+
 
         if (winner == 1)
         {
-            stringPrint.PrintHorizontally("\nCongrats! You won!\n\n");
+            stringPrint.PrintHorizontally($"\nCongrats! {humanPlayer.Name} won!\n\n");
+            return humanPlayer;
+
         }
         else if (winner == 2)
         {
             stringPrint.PrintHorizontally("\nTorsten won!\n\n");
+            return computerPlayer;
         }
-        else if (winner == 3)
+        else
         {
-            stringPrint.PrintHorizontally("\nIt's a tie!\n\n");
+            return null;
         }
-        Console.ResetColor();
+        // else if (winner == 3)
+        // {
+        //     stringPrint.PrintHorizontally("\nIt's a tie!\n\n");
+        //     return "Draw";
+        // }
+        // else
+        // {
+        //     return ".";
+        // }
+
+        //Console.ResetColor();
     }
+
+     private void UpdateWins(Player winner)
+    {
+    if (winner == null)
+    {
+        Console.WriteLine("The game ended in a draw. No wins recorded.");
+        return;
+    }
+
+    // Find the winner in the playerWins list by reference
+    var playerWin = playerWins.Find(p => p.Player?.Name == winner.Name);
+    if (playerWin != null)
+    {
+        playerWin.Wins++;
+    }
+    else
+    {
+        playerWins.Add(new PlayerWins { Player = winner, Wins = 1 });
+    }
+
+
+        //Console.WriteLine($"{winner.Name} has won this game!");
+    }
+
+    private void SaveWins()
+    {
+        winsHandler.Save(playerWins, WinsLogFilePath);
+        //Console.WriteLine("Win records saved.");
+    }
+
+    private void PromptPreviousWins()   
+{       
+    // foreach (var win in playerWins)
+    // {
+    //     Console.WriteLine(win == null ? "Null entry in playerWins" : $"\n{win.Player?.Name ?? "null"}'s wins: {win.Wins}");
+    // }
+
+    // Console.WriteLine("Do you want to see the win records? (yes/no)");
+    // string input = Console.ReadLine();
+    // if (input?.ToLower() == "yes")
+    // {
+    //     if (!playerWins.Any())
+    //     {
+    //         Console.WriteLine("No win records found.");
+    //         return;
+    //     }
+
+        Console.WriteLine("Win Records:");
+        foreach (var record in playerWins)
+        {
+            if (record == null || record.Player == null)
+            {
+                Console.WriteLine("Invalid record found.");
+                continue;
+            }
+            Console.WriteLine(record); // Calls PlayerWins.ToString()
+        }
+    // }
+}
+
 
     static string DisplayMenu(string[] options)
     {
@@ -294,7 +457,7 @@ public class Game
         PrintQuartettes(humanPlayer.hand.listOfQuartettes);
         Console.ResetColor();
         
-        Console.Write($"\n{computerPlayer.name}'s quartettes: ");
+        Console.Write($"\n{computerPlayer.Name}'s quartettes: ");
         Console.ForegroundColor = ConsoleColor.Green;
         PrintQuartettes(computerPlayer.hand.listOfQuartettes);
         Console.ResetColor();
