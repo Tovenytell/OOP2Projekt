@@ -1,7 +1,15 @@
 [
   {
     "PlayerName": "Torsten",
+    "Action": "Asked for Sixs"
+  },
+  {
+    "PlayerName": "Torsten",
     "Action": "Asked for Fives"
+  },
+  {
+    "PlayerName": "Torsten",
+    "Action": "Asked for Sevens"
   },
   {
     "PlayerName": "Torsten",
@@ -9,6 +17,6 @@
   },
   {
     "PlayerName": "Torsten",
-    "Action": "Asked for Queens"
+    "Action": "Asked for Sixs"
   }
 ]

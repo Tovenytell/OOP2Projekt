@@ -2,7 +2,7 @@ public class SmartBehavior : Behavior
 {
     public readonly List<PreviousMoves> moves;
 
-    public SmartBehavior(List<PreviousMoves> moves)/*, IPointSystem pSystem, Player hPlayer, Player cPlayer) : base (pSystem, hPlayer, cPlayer)*/
+    public SmartBehavior(List<PreviousMoves> moves)
     {
         this.moves = moves;
     }

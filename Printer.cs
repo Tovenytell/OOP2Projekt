@@ -1,11 +1,5 @@
-public class Printer<T> // KRAV #1:
-//Koncept: Generics
-//Vi använder den generiska typen Printer<T> genom att skapa olika typer av printers i Game för att 
-//kunna printa ut olika typer, till exempel kunna printa ut typen Hand och int
-//Vi använder det för att kunna printa ut olika typer. Skulle vi i famtiden vilja kunna printa ut andra typer av kort
-//t.ex. en UNO-kortlek kan detta även vara användbart.
+public class Printer<T>
 {
-
     //från chat
     private readonly Dictionary<Suits, string> suitIcons = new Dictionary<Suits, string>
     {
@@ -74,4 +68,5 @@ public class Printer<T> // KRAV #1:
             Console.WriteLine(input);
         }
     }
+
 }

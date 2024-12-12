@@ -4,7 +4,7 @@ public class RandomBehavior : Behavior
 
     public readonly List<PreviousMoves> moves;
 
-    public RandomBehavior(List<PreviousMoves> moves)/*, IPointSystem pSystem, Player hPlayer, Player cPlayer) : base (pSystem, hPlayer, cPlayer)*/
+    public RandomBehavior(List<PreviousMoves> moves)
     {
         this.moves = moves;
     }

@@ -13,12 +13,6 @@ public abstract class Behavior //KRAV #2
 
     public int Score {get; private set;} = 0;
 
-    // public Behavior(IPointSystem pSystem, Player hPlayer, Player cPlayer)
-    // {
-    //     pointSystem = pSystem;
-    //     humanPlayer = hPlayer;
-    //     computerPlayer = cPlayer;
-    // }
     public List<Values> CheckAvailableValues(Player player)
     {
         // KRAV 5

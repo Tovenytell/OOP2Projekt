@@ -1,6 +1,6 @@
 public class HelpBehavior : Behavior
 {
-    public IPointSystem pointSystem;
+    
     private readonly FileHandler<List<PreviousMoves>> moveHandler = new FileHandler<List<PreviousMoves>>();
 
     private static readonly Dictionary<string, Values> ValueMapping = new()
@@ -19,10 +19,7 @@ public class HelpBehavior : Behavior
         { "Queen", Values.Queen },
         { "King", Values.King }
     };
-    // public HelpBehavior(IPointSystem pSystem, Player hPlayer, Player cPlayer) : base(pSystem, hPlayer, cPlayer)
-    // {
-    // }
-
+    
     public List<Values> GetPreviouslyAskedValues(string filePath)
     {
         try
@@ -34,33 +31,16 @@ public class HelpBehavior : Behavior
                 .Where(move => move.PlayerName == "Torsten") // Bara datorns drag
                 .Select(move =>
                 {
-                    // Exempel: Tolka "Asked for 5s" och extrahera värdet 5
-                    // if (move.Action.StartsWith("Asked for "))
-                    // {
-                    //     //string valueStr = move.Action.Substring(10).TrimEnd('s');
-                    //     string valueStr = move.Action.Substring("Asked for ".Length).TrimEnd('s', ' ', '\n', '\r');
-                    //     // return int.TryParse(valueStr, out int value) && Enum.IsDefined(typeof(Values), value)
-                    //     //     ? (Values)value
-                    //     //     : (Values?)null;
-                    //     if (int.TryParse(valueStr, out int value) && Enum.IsDefined(typeof(Values), value))
-                    //     {
-                    //         return (Values?)value; // Return successfully parsed value as nullable
-                    //     }
-                    // else
-                    // {
-                    //     Console.WriteLine($"Failed to parse or invalid value: {valueStr}");
-                    // }
-                    // }
 
                 if (move.Action.StartsWith("Asked for ", StringComparison.OrdinalIgnoreCase))
                 {
-                    // Extract the card value as a string
+                    
                     string valueStr = move.Action.Substring("Asked for ".Length).TrimEnd('s', ' ', '\n', '\r');
 
-                    // Map the string to a Values enum
+                    
                     if (ValueMapping.TryGetValue(valueStr, out Values value))
                     {
-                        return (Values?)value; // Return the mapped value
+                        return (Values?)value; 
                     }
                     else
                     {
@@ -89,24 +69,24 @@ public class HelpBehavior : Behavior
 
     public List<Values> GetSuggestedValues(Player player, string movesFilePath)
     {   
-        // Step 1: Use CheckAvailableValues to get available values from the player's hand
+        
         List<Values> availableValues = CheckAvailableValues(player);
 
-        // Step 2: Load previously asked values from the JSON file
+        
         List<Values> previouslyAskedValues = GetPreviouslyAskedValues(movesFilePath);
 
-        // Step 3: Find the intersection of available values and previously asked values
+        
         List<Values> suggestedValues = availableValues
-            .Intersect(previouslyAskedValues) // Only keep values that are in both lists
+            .Intersect(previouslyAskedValues) 
             .ToList();
 
         if (!suggestedValues.Any())
         {
             Console.WriteLine("No information about help exists at the moment.");
-            return new List<Values>(); // Return an empty list, or alternatively return availableValues if needed
+            return new List<Values>(); 
         }
 
-            // Return the suggested values
+            
             return suggestedValues;
          }
 
@@ -119,10 +99,20 @@ public class HelpBehavior : Behavior
         }
 
         Console.WriteLine("\n\nWhat card would you like to ask for?");
-        //LÄGG TILL FELHANTERING!!!!
-        Values input = (Values)Enum.Parse(typeof(Values), Console.ReadLine(), true);
+  
+        while (true) 
+        {
+            string input = Console.ReadLine();
 
-        return input;
+            // Validate input
+            if (Enum.TryParse(typeof(Values), input, true, out var result) && Enum.IsDefined(typeof(Values), result))
+            {
+                return (Values)result;
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter a valid card value.");
+            }
+        }
     }
-
 }
